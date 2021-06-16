@@ -27,7 +27,7 @@ const SearchBar = (props) => {
   }, [])
 
   return (
-    <div onClick={()=> props.setSearchFor(searchField)}>
+    <div onClick={() => props.setSearchFor(searchField)}>
       <Autosuggest
         inputProps={{
           'placeholder': `Search for ${searchField}`,

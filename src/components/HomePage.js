@@ -15,8 +15,8 @@ const HomePage = () => {
   const [posts, setPosts] = useState([]);
 
   const handleBasicSearch = async () => {
-    if(searchFor){
-      if(searchFor==='companies' && companiesQueries){
+    if (searchFor) {
+      if (searchFor === 'companies' && companiesQueries) {
         const getPosts = await Api('').post('/posts/company', {
           "sortKey": "create_date",
           "sortOrder": "asc",
@@ -26,7 +26,7 @@ const HomePage = () => {
         });
         setIsLoadedPosts(true);
         setPosts(getPosts.data);
-      } else if (searchFor==='positions' && positionsQuery){
+      } else if (searchFor === 'positions' && positionsQuery) {
         const getPosts = await Api('').post('/posts/position', {
           "sortKey": "create_date",
           "sortOrder": "asc",
@@ -36,7 +36,7 @@ const HomePage = () => {
         });
         setIsLoadedPosts(true);
         setPosts(getPosts.data);
-      } else if (searchFor==='questions' && questionsQuery){
+      } else if (searchFor === 'questions' && questionsQuery) {
         alert('Not implemented yet');
       }
     }
