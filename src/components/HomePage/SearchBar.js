@@ -1,19 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Autosuggest from 'react-autosuggest';
 import Api from '../../ApiRequest';
 import './SearchBar.css';
 
 const SearchBar = (props) => {
-  const [searchField, setSearchField] = useState('Questions');
+  const { searchField } = props;
   const [suggestions, setSuggestions] = useState([]);
   const [fullSuggestions, setFullSuggestions] = useState([]);
 
-  const onSearchFieldChange = async (evt) => {
-    setSearchField(evt.target.value);
-    if (evt.target.value === 'Companies') {
+  const getFullSuggestions = async () => {
+    if (searchField === 'companies') {
       const companies = await Api('').get('/companies');
       setFullSuggestions(companies.data);
-    } else if (evt.target.value === 'Positions') {
+    } else if (searchField === 'positions') {
       const positions = await Api('').get('/positions');
       setFullSuggestions(positions.data);
     } else {
@@ -21,20 +20,20 @@ const SearchBar = (props) => {
     }
   }
 
-  return (
-    <div>
-      <select onChange={onSearchFieldChange} defaultValue='Questions'>
-        <option>Questions</option>
-        <option>Companies</option>
-        <option>Positions</option>
-      </select>
+  useEffect(async () => {
+    if (fullSuggestions.length <= 0 && searchField) {
+      getFullSuggestions();
+    }
+  }, [])
 
+  return (
+    <div onClick={()=> props.setSearchFor(searchField)}>
       <Autosuggest
         inputProps={{
           'placeholder': `Search for ${searchField}`,
           'autoComplete': 'False',
-          'name': 'searchQueryBar',
-          'id': 'searchQueryBar',
+          'name': `${searchField}SearchBar`,
+          'id': `${searchField}SearchBar`,
           'value': props.searchQuery,
           'onChange': (evt, { newValue }) => {
             props.setSearchQuery(newValue)
@@ -63,7 +62,6 @@ const SearchBar = (props) => {
           props.setSearchQuery(suggestion)
         }}
       />
-
     </div>
   );
 };

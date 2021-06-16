@@ -6,13 +6,44 @@ import PostCard from './Post/PostCard';
 
 const HomePage = () => {
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchFor, setSearchFor] = useState('');
+  const [questionsQuery, setQuestionsQuery] = useState('');
+  const [companiesQueries, setCompaniesQuery] = useState('');
+  const [positionsQuery, setPositionsQuery] = useState('');
 
   const [isLoadedPosts, setIsLoadedPosts] = useState(false);
   const [posts, setPosts] = useState([]);
 
+  const handleBasicSearch = async () => {
+    if(searchFor){
+      if(searchFor==='companies' && companiesQueries){
+        const getPosts = await Api('').post('/posts/company', {
+          "sortKey": "create_date",
+          "sortOrder": "asc",
+          "limit": 25,
+          "offset": 0,
+          "company": companiesQueries
+        });
+        setIsLoadedPosts(true);
+        setPosts(getPosts.data);
+      } else if (searchFor==='positions' && positionsQuery){
+        const getPosts = await Api('').post('/posts/position', {
+          "sortKey": "create_date",
+          "sortOrder": "asc",
+          "limit": 25,
+          "offset": 0,
+          "position": positionsQuery
+        });
+        setIsLoadedPosts(true);
+        setPosts(getPosts.data);
+      } else if (searchFor==='questions' && questionsQuery){
+        alert('Not implemented yet');
+      }
+    }
+  }
+
   useEffect(async () => {
-    if(!isLoadedPosts) {
+    if (!isLoadedPosts) {
       const getPosts = await Api('').post('/posts/all', {
         "sortKey": "create_date",
         "sortOrder": "asc",
@@ -28,14 +59,19 @@ const HomePage = () => {
     <div>
       <h1>Hi from HomePage</h1>
       <h4>Login</h4>
-      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      <button>Search</button>
-      
       <br />
 
-      {posts.length > 0 ? posts.map((post)=>{
-        return <PostCard post={post} key={post.id}/>
-      }) : '' }
+      <SearchBar searchQuery={questionsQuery} setSearchQuery={setQuestionsQuery} searchField='questions' setSearchFor={setSearchFor} />
+      <SearchBar searchQuery={companiesQueries} setSearchQuery={setCompaniesQuery} searchField='companies' setSearchFor={setSearchFor} />
+      <SearchBar searchQuery={positionsQuery} setSearchQuery={setPositionsQuery} searchField='positions' setSearchFor={setSearchFor} />
+      <br />
+      <button onClick={handleBasicSearch}>Search</button>
+      <br />
+      <button>Search Company & Position</button>
+
+      {posts.length > 0 ? posts.map((post) => {
+        return <PostCard post={post} key={post.id} />
+      }) : ''}
 
     </div>
   )
