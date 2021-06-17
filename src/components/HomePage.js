@@ -38,20 +38,41 @@ const HomePage = () => {
         setPosts(getPosts.data);
       } else if (searchFor === 'questions' && questionsQuery) {
         alert('Not implemented yet');
+      } else {
+        getAllPosts();
       }
     }
   }
 
-  useEffect(async () => {
-    if (!isLoadedPosts) {
-      const getPosts = await Api('').post('/posts/all', {
+  const handlePositionCompanySearch = async () => {
+    if (searchFor && companiesQueries && positionsQuery) {
+      const getPosts = await Api('').post('/posts/position/company', {
         "sortKey": "create_date",
         "sortOrder": "asc",
         "limit": 25,
-        "offset": 0
+        "offset": 0,
+        "position": positionsQuery,
+        "company": companiesQueries
       });
       setIsLoadedPosts(true);
       setPosts(getPosts.data);
+    }
+  }
+
+  const getAllPosts = async () => {
+    const getPosts = await Api('').post('/posts/all', {
+      "sortKey": "create_date",
+      "sortOrder": "asc",
+      "limit": 25,
+      "offset": 0
+    });
+    setIsLoadedPosts(true);
+    setPosts(getPosts.data);
+  }
+
+  useEffect(() => {
+    if (!isLoadedPosts) {
+      getAllPosts();
     }
   }, [])
 
@@ -67,7 +88,7 @@ const HomePage = () => {
       <br />
       <button onClick={handleBasicSearch}>Search</button>
       <br />
-      <button>Search Company & Position</button>
+      <button onClick={handlePositionCompanySearch}>Search Company & Position</button>
 
       {posts.length > 0 ? posts.map((post) => {
         return <PostCard post={post} key={post.id} />
