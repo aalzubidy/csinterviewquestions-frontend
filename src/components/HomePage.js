@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import { withRouter, useHistory } from 'react-router-dom';
 import Api from '../ApiRequest';
 import SearchBar from './HomePage/SearchBar';
@@ -98,4 +98,4 @@ const HomePage = () => {
   )
 };
 
-export default withRouter(HomePage);
+export default withRouter(memo(HomePage));
