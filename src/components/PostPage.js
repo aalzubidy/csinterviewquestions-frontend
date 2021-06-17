@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import { withRouter, useHistory, useParams } from "react-router-dom";
 import Api from '../ApiRequest';
+import CommentCard from './Comment/CommentCard';
 
 const PostPage = (props) => {
   const { postId } = useParams();
@@ -8,6 +9,8 @@ const PostPage = (props) => {
 
   const [post, setPost] = useState('');
   const [postNotFound, setPostNotFound] = useState(false);
+
+  const [comments, setComments] = useState('');
 
   const { id, title, create_date, interview_date, company, body, position, views } = post;
 
@@ -25,8 +28,19 @@ const PostPage = (props) => {
     }
   };
 
+  const getComments = async () => {
+    const getCommentResponse = await Api('').post('/comments/post', {
+      "postId": id,
+      "sortOrder": "asc",
+      "limit": 25,
+      "offset": 0
+    });
+    setComments(getCommentResponse.data);
+  }
+
   useEffect(() => {
     if (!post) getPost();
+    if(id && !comments) getComments();
   }, []);
 
   return (
@@ -48,7 +62,10 @@ const PostPage = (props) => {
           Views: {views} <br />
           Body: {body} <br />
           <hr />
-        </div>: ''}
+        </div> : ''}
+
+        {}
+
     </div>
   )
 }
