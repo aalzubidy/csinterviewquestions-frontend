@@ -11,6 +11,7 @@ const PostPage = (props) => {
   const [postNotFound, setPostNotFound] = useState(false);
 
   const [comments, setComments] = useState('');
+  const [solutions, setSolutions] = useState(false);
 
   const { id, title, create_date, interview_date, company, body, position, views } = post;
 
@@ -35,7 +36,7 @@ const PostPage = (props) => {
 
   const getComments = async () => {
     try {
-      const getCommentResponse = await Api('').post('/comments/post', {
+      const getCommentResponse = await Api('').post(`/comments/post${solutions ? '/solutions' : ''}`, {
         "postId": id,
         "sortOrder": "asc",
         "limit": 25,
@@ -49,8 +50,8 @@ const PostPage = (props) => {
 
   useEffect(() => {
     if (!post) getPost();
-    if (id && !comments) getComments();
-  }, [post]);
+    if (id) getComments();
+  }, [post, solutions]);
 
   return (
     <div>
@@ -73,6 +74,8 @@ const PostPage = (props) => {
           <hr />
         </div> : ''}
 
+      {comments ? <button onClick={() => setSolutions(!solutions)}>Filter Solution: {solutions ? 'On' : 'Off'}</button> : ''}
+      
       {comments ? comments.map((comment) => <CommentCard key={comment.id} comment={comment} />) : ''}
 
     </div>
