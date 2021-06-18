@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter, Redirect, useHistory } from "react-router-dom";
 
 const CommentCard = (props) => {
-  const { id, create_date, body, solution } = props.post;
+  const { id, create_date, body, solution } = props.comment;
 
   const createDate = new Date(create_date).toISOString().substring(0, 10);
 
@@ -16,7 +16,6 @@ const CommentCard = (props) => {
       Solution: {solution} <br />
       Body: {body} <br />
       <button>Expand Post</button>
-      <hr />
     </div>
   )
 }

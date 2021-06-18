@@ -18,30 +18,39 @@ const PostPage = (props) => {
   const interviewDate = interview_date ? new Date(interview_date).toISOString().substring(0, 10) : '';
 
   const getPost = async () => {
-    const postResponse = await Api('').get(`/posts/${postId}`);
-    if (postResponse && postResponse.data) {
-      setPost(postResponse.data);
-      setLoading(false);
-    } else {
+    try {
+      const postResponse = await Api('').get(`/posts/${postId}`);
+      if (postResponse && postResponse.data) {
+        setPost(postResponse.data);
+        setLoading(false);
+      } else {
+        setLoading(false);
+        setPostNotFound(true);
+      }
+    } catch (error) {
       setLoading(false);
       setPostNotFound(true);
     }
   };
 
   const getComments = async () => {
-    const getCommentResponse = await Api('').post('/comments/post', {
-      "postId": id,
-      "sortOrder": "asc",
-      "limit": 25,
-      "offset": 0
-    });
-    setComments(getCommentResponse.data);
+    try {
+      const getCommentResponse = await Api('').post('/comments/post', {
+        "postId": id,
+        "sortOrder": "asc",
+        "limit": 25,
+        "offset": 0
+      });
+      setComments(getCommentResponse.data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   useEffect(() => {
     if (!post) getPost();
-    if(id && !comments) getComments();
-  }, []);
+    if (id && !comments) getComments();
+  }, [post]);
 
   return (
     <div>
@@ -64,7 +73,7 @@ const PostPage = (props) => {
           <hr />
         </div> : ''}
 
-        {}
+      {comments ? comments.map((comment) => <CommentCard key={comment.id} comment={comment} />) : ''}
 
     </div>
   )
