@@ -13,6 +13,8 @@ const PostPage = (props) => {
   const [comments, setComments] = useState('');
   const [solutions, setSolutions] = useState(false);
 
+  const history = useHistory();
+
   const { id, title, create_date, interview_date, company, body, position, views } = post;
 
   const createDate = create_date ? new Date(create_date).toISOString().substring(0, 10) : '';
@@ -63,6 +65,7 @@ const PostPage = (props) => {
 
       {postNotFound === false && post && !loading ?
         <div>
+          <button onClick={() => history.push('/')}>Home</button> <br />
           ID : {id} < br />
           Title: {title} <br />
           Create Date {createDate} <br />
@@ -75,7 +78,7 @@ const PostPage = (props) => {
         </div> : ''}
 
       {comments ? <button onClick={() => setSolutions(!solutions)}>Filter Solution: {solutions ? 'On' : 'Off'}</button> : ''}
-      
+
       {comments ? comments.map((comment) => <CommentCard key={comment.id} comment={comment} />) : ''}
 
     </div>

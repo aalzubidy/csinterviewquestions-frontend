@@ -14,12 +14,14 @@ const HomePage = () => {
   const [isLoadedPosts, setIsLoadedPosts] = useState(false);
   const [posts, setPosts] = useState([]);
 
+  const [sortKey, setSortKey] = useState('create_date');
+
   const handleBasicSearch = async () => {
     if (searchFor) {
       if (searchFor === 'companies' && companiesQueries) {
         const getPosts = await Api('').post('/posts/company', {
-          "sortKey": "create_date",
-          "sortOrder": "asc",
+          "sortKey": sortKey,
+          "sortOrder": "desc",
           "limit": 25,
           "offset": 0,
           "company": companiesQueries
@@ -28,8 +30,8 @@ const HomePage = () => {
         setPosts(getPosts.data);
       } else if (searchFor === 'positions' && positionsQuery) {
         const getPosts = await Api('').post('/posts/position', {
-          "sortKey": "create_date",
-          "sortOrder": "asc",
+          "sortKey": sortKey,
+          "sortOrder": "desc",
           "limit": 25,
           "offset": 0,
           "position": positionsQuery
@@ -47,8 +49,8 @@ const HomePage = () => {
   const handlePositionCompanySearch = async () => {
     if (searchFor && companiesQueries && positionsQuery) {
       const getPosts = await Api('').post('/posts/position/company', {
-        "sortKey": "create_date",
-        "sortOrder": "asc",
+        "sortKey": sortKey,
+        "sortOrder": "desc",
         "limit": 25,
         "offset": 0,
         "position": positionsQuery,
@@ -61,8 +63,8 @@ const HomePage = () => {
 
   const getAllPosts = async () => {
     const getPosts = await Api('').post('/posts/all', {
-      "sortKey": "create_date",
-      "sortOrder": "asc",
+      "sortKey": sortKey,
+      "sortOrder": "desc",
       "limit": 25,
       "offset": 0
     });
@@ -70,11 +72,21 @@ const HomePage = () => {
     setPosts(getPosts.data);
   }
 
-  useEffect(() => {
-    if (!isLoadedPosts) {
-      getAllPosts();
-    }
-  }, [])
+  const handleSortKey = async (evt) => {
+    evt.preventDefault();
+    setSortKey(evt.target.value);
+    setIsLoadedPosts(false);
+  }
+
+  if (!isLoadedPosts) {
+    getAllPosts();
+  }
+
+  // useEffect(() => {
+  //   if (!isLoadedPosts) {
+  //     getAllPosts();
+  //   }
+  // }, [isLoadedPosts, sortKey])
 
   return (
     <div>
@@ -89,6 +101,18 @@ const HomePage = () => {
       <button onClick={handleBasicSearch}>Search</button>
       <br />
       <button onClick={handlePositionCompanySearch}>Search Company & Position</button>
+
+      <br />
+      <br />
+
+      {posts.length > 0 ? <div>
+        <label htmlFor='sortByKey'>Sort By: </label>
+        <select name='sortByKey' value={sortKey} onChange={handleSortKey}>
+          <option value='create_date'>Create Date</option>
+          <option value='interview_date'>Interview Date</option>
+          <option value='views'>Views</option>
+        </select>
+      </div> : ''}
 
       {posts.length > 0 ? posts.map((post) => {
         return <PostCard post={post} key={post.id} />
