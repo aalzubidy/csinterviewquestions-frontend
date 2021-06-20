@@ -3,8 +3,12 @@ import { withRouter, useHistory } from "react-router-dom";
 import { AuthContext } from './contexts/AuthContext';
 
 const Navbar = () => {
-    const { user } = useContext(AuthContext);
+    // Settings
     const history = useHistory();
+
+    // Authorization
+    const { token } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     const handleOnClick = (evt) => {
         evt.preventDefault();
@@ -13,11 +17,10 @@ const Navbar = () => {
 
     return (
         <div>
-            <h1>Hi {user ? user.username : ''}!</h1>
+            <h1>{token && user ? `Hi ${user.username}!` : ''}</h1>
             <button onClick={handleOnClick} name="">Home</button>
-            <button onClick={handleOnClick} name="login">Login</button>
+            {!token && !user ? <button onClick={handleOnClick} name="login">Login</button> : <button onClick={handleOnClick} name="accountSettings">Account</button>}
             <button onClick={handleOnClick} name="newPost">New Post</button>
-            <button onClick={handleOnClick} name="accountSettings">Acount Settings</button>
         </div>
     );
 }

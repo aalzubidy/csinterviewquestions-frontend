@@ -1,70 +1,62 @@
 import React, { memo, useState, useEffect, useContext } from 'react';
 import { withRouter, useHistory } from 'react-router-dom';
-import {AuthContext} from '../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthContext';
 import Api from '../ApiRequest';
 import SearchBar from './HomePage/SearchBar';
 import PostCard from './Post/PostCard';
 
 const HomePage = () => {
+  // Settings
   const history = useHistory();
 
-  const {token} = useContext(AuthContext);
+  // Authentication
+  const { token } = useContext(AuthContext);
 
+  // Handle search
   const [searchFor, setSearchFor] = useState('');
   const [questionsQuery, setQuestionsQuery] = useState('');
   const [companiesQueries, setCompaniesQuery] = useState('');
   const [positionsQuery, setPositionsQuery] = useState('');
 
+  // Handle posts
   const [isLoadedPosts, setIsLoadedPosts] = useState(false);
   const [posts, setPosts] = useState([]);
-
   const [sortKey, setSortKey] = useState('create_date');
 
-  const handleBasicSearch = async () => {
-    if (searchFor) {
-      if (searchFor === 'companies' && companiesQueries) {
-        const getPosts = await Api('').post('/posts/company', {
-          "sortKey": sortKey,
-          "sortOrder": "desc",
-          "limit": 25,
-          "offset": 0,
-          "company": companiesQueries
-        });
-        setIsLoadedPosts(true);
-        setPosts(getPosts.data);
-      } else if (searchFor === 'positions' && positionsQuery) {
-        const getPosts = await Api('').post('/posts/position', {
-          "sortKey": sortKey,
-          "sortOrder": "desc",
-          "limit": 25,
-          "offset": 0,
-          "position": positionsQuery
-        });
-        setIsLoadedPosts(true);
-        setPosts(getPosts.data);
-      } else if (searchFor === 'questions' && questionsQuery) {
-        alert('Not implemented yet');
-      } else {
-        getAllPosts();
-      }
-    }
-  }
-
-  const handlePositionCompanySearch = async () => {
-    if (searchFor && companiesQueries && positionsQuery) {
-      const getPosts = await Api('').post('/posts/position/company', {
+  // Search for questions, company, position, or position/company posts
+  const searchPosts = async () => {
+    if (questionsQuery || companiesQueries || positionsQuery) {
+      let url = '/posts';
+      const body = {
         "sortKey": sortKey,
         "sortOrder": "desc",
         "limit": 25,
         "offset": 0,
-        "position": positionsQuery,
-        "company": companiesQueries
-      });
+      };
+
+      if (companiesQueries && !positionsQuery) {
+        url += '/company';
+        body['company'] = companiesQueries;
+      } else if (!companiesQueries && positionsQuery) {
+        url += '/position';
+        body['position'] = positionsQuery;
+      } else if (questionsQuery) {
+        alert('Search for questions is not implemented yet');
+      } else if (companiesQueries && positionsQuery) {
+        url += '/position/company';
+        body['company'] = companiesQueries;
+        body['position'] = positionsQuery;
+      }
+
+      const getPosts = await Api('').post(url, body);
       setIsLoadedPosts(true);
       setPosts(getPosts.data);
+    } else {
+      getAllPosts();
     }
   }
 
+  // Search for all posts in general
   const getAllPosts = async () => {
     const getPosts = await Api('').post('/posts/all', {
       "sortKey": sortKey,
@@ -76,40 +68,37 @@ const HomePage = () => {
     setPosts(getPosts.data);
   }
 
+  // Switch the sorting key
   const handleSortKey = async (evt) => {
     evt.preventDefault();
     setSortKey(evt.target.value);
     setIsLoadedPosts(false);
   }
 
+  // If there are no posts loaded then get all the posts
   if (!isLoadedPosts) {
     getAllPosts();
   }
 
-  // useEffect(() => {
-  //   if (!isLoadedPosts) {
-  //     getAllPosts();
-  //   }
-  // }, [isLoadedPosts, sortKey])
+  useEffect(() => {
+    if (searchFor === 'question') {
+      setCompaniesQuery('');
+      setPositionsQuery('');
+    } else {
+      setQuestionsQuery('');
+    }
+  }, [searchFor])
 
   return (
     <div>
-      <h1>Hi from HomePage</h1>
-      {!token ? <button onClick={()=>history.push('/login')}>Login</button> : ''}
       <br />
       <br />
 
-      <button onClick={()=>history.push('/newPost')}>New Post</button>
+      <SearchBar searchQuery={questionsQuery} setSearchQuery={setQuestionsQuery} searchField='question' setSearchFor={setSearchFor} />
+      <SearchBar searchQuery={companiesQueries} setSearchQuery={setCompaniesQuery} searchField='company' setSearchFor={setSearchFor} />
+      <SearchBar searchQuery={positionsQuery} setSearchQuery={setPositionsQuery} searchField='position' setSearchFor={setSearchFor} />
       <br />
-      <br />
-
-      <SearchBar searchQuery={questionsQuery} setSearchQuery={setQuestionsQuery} searchField='questions' setSearchFor={setSearchFor} />
-      <SearchBar searchQuery={companiesQueries} setSearchQuery={setCompaniesQuery} searchField='companies' setSearchFor={setSearchFor} />
-      <SearchBar searchQuery={positionsQuery} setSearchQuery={setPositionsQuery} searchField='positions' setSearchFor={setSearchFor} />
-      <br />
-      <button onClick={handleBasicSearch}>Search</button>
-      <br />
-      <button onClick={handlePositionCompanySearch}>Search Company & Position</button>
+      <button onClick={searchPosts}>Search</button>
 
       <br />
       <br />

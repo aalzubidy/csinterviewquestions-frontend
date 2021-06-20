@@ -9,10 +9,10 @@ const SearchBar = (props) => {
   const [fullSuggestions, setFullSuggestions] = useState([]);
 
   const getFullSuggestions = async () => {
-    if (searchField === 'companies') {
+    if (searchField === 'company') {
       const companies = await Api('').get('/companies');
       setFullSuggestions(companies.data);
-    } else if (searchField === 'positions') {
+    } else if (searchField === 'position') {
       const positions = await Api('').get('/positions');
       setFullSuggestions(positions.data);
     } else {
