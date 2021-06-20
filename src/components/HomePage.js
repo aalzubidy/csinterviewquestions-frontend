@@ -1,10 +1,14 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useContext } from 'react';
 import { withRouter, useHistory } from 'react-router-dom';
+import {AuthContext} from '../contexts/AuthContext';
 import Api from '../ApiRequest';
 import SearchBar from './HomePage/SearchBar';
 import PostCard from './Post/PostCard';
 
 const HomePage = () => {
+  const history = useHistory();
+
+  const {token} = useContext(AuthContext);
 
   const [searchFor, setSearchFor] = useState('');
   const [questionsQuery, setQuestionsQuery] = useState('');
@@ -91,7 +95,12 @@ const HomePage = () => {
   return (
     <div>
       <h1>Hi from HomePage</h1>
-      <h4>Login</h4>
+      {!token ? <button onClick={()=>history.push('/login')}>Login</button> : ''}
+      <br />
+      <br />
+
+      <button onClick={()=>history.push('/newPost')}>New Post</button>
+      <br />
       <br />
 
       <SearchBar searchQuery={questionsQuery} setSearchQuery={setQuestionsQuery} searchField='questions' setSearchFor={setSearchFor} />

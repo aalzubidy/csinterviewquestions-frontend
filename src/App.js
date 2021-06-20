@@ -1,11 +1,14 @@
 // import logo from './logo.svg';
 // import './App.css';
 import MainApp from './MainApp';
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
   return (
     <div className="App">
-      <MainApp />
+      <AuthProvider>
+        <MainApp />
+      </AuthProvider>
     </div>
   );
 }
