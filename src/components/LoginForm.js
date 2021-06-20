@@ -100,13 +100,13 @@ const LoginForm = (props) => {
       </div> : ''}
       <br />
 
-      <input placeholder='Enter email' name='email' value={email} onChange={(evt) => setEmail(evt.target.value)} />
+      <input type="email" placeholder='Enter email' name='email' value={email} onChange={(evt) => setEmail(evt.target.value)} required />
       <br />
 
       {newUser ? <input placeholder='Enter a display name for comments' name='username' value={username} onChange={(evt) => setUsername(evt.target.value)} /> : ''}
       <br />
 
-      {pinSent ? <input placeholder='Enter your login pin' name='pin' value={pin} onChange={(evt) => setPin(evt.target.value)} /> : ''}
+      {pinSent ? <input type="password" placeholder='Enter your login pin' name='pin' value={pin} onChange={(evt) => setPin(evt.target.value)} required /> : ''}
       <br />
 
       {!pinSent ? <button disabled={disableSendPassword} onClick={generatePin}>Get 1 Time Password</button> : ''}

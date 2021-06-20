@@ -94,9 +94,9 @@ const HomePage = () => {
       <br />
       <br />
 
-      <SearchBar searchQuery={questionsQuery} setSearchQuery={setQuestionsQuery} searchField='question' setSearchFor={setSearchFor} />
-      <SearchBar searchQuery={companiesQueries} setSearchQuery={setCompaniesQuery} searchField='company' setSearchFor={setSearchFor} />
-      <SearchBar searchQuery={positionsQuery} setSearchQuery={setPositionsQuery} searchField='position' setSearchFor={setSearchFor} />
+      <span onClick={() => setSearchFor('question')}><SearchBar searchQuery={questionsQuery} setSearchQuery={setQuestionsQuery} searchField='question' /></span>
+      <span onClick={() => setSearchFor('company')}><SearchBar searchQuery={companiesQueries} setSearchQuery={setCompaniesQuery} searchField='company' /></span>
+      <span onClick={() => setSearchFor('position')}><SearchBar searchQuery={positionsQuery} setSearchQuery={setPositionsQuery} searchField='position' /></span>
       <br />
       <button onClick={searchPosts}>Search</button>
 
