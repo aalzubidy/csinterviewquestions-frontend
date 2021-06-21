@@ -18,7 +18,7 @@ export function AuthProvider(props) {
     const baseUrl = 'http://localhost:3030';
     const renewTokenUrl = '/renewTokenByCookie';
     const loginUrl = '/login';
-    const logoutUrl = '/logout';
+    const logoutUrl = '/logoutByCookie';
     const generateUserPinUrl = '/generateUserPin';
     const getUserUrl = '/getTokenUser';
 
@@ -122,10 +122,8 @@ export function AuthProvider(props) {
     // Logout user from backend and front end
     const logout = async () => {
         try {
-            await axios.delete(baseUrl + logoutUrl, {
-                headers: {
-                    token
-                }
+            await axios.post(baseUrl + logoutUrl, {}, {
+                withCredentials: true
             });
             clearToken();
             return ('Logged out successful');
