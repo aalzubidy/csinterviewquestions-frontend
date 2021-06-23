@@ -1,7 +1,9 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState, useContext } from 'react';
 import { withRouter, useHistory, useParams } from "react-router-dom";
+import { AuthContext } from '../contexts/AuthContext';
 import Api from '../ApiRequest';
 import CommentCard from './Comment/CommentCard';
+import NewComment from './Comment/NewComment';
 
 const PostPage = (props) => {
   const { postId } = useParams();
@@ -14,6 +16,8 @@ const PostPage = (props) => {
   const [solutions, setSolutions] = useState(false);
 
   const history = useHistory();
+
+  const { token } = useContext(AuthContext);
 
   const { id, title, create_date, interview_date, company, body, position, views } = post;
 
@@ -50,6 +54,10 @@ const PostPage = (props) => {
     }
   }
 
+  const postedNewComment = async () => {
+    getComments();
+  }
+
   useEffect(() => {
     if (!post) getPost();
     if (id) getComments();
@@ -65,7 +73,6 @@ const PostPage = (props) => {
 
       {postNotFound === false && post && !loading ?
         <div>
-          <button onClick={() => history.push('/')}>Home</button> <br />
           ID : {id} < br />
           Title: {title} <br />
           Create Date {createDate} <br />
@@ -76,6 +83,8 @@ const PostPage = (props) => {
           Body: {body} <br />
           <hr />
         </div> : ''}
+
+      {postNotFound === false && post && !loading && token ? <NewComment postId={id} postedNewComment={postedNewComment} /> : <button onClick={() => history.push('/login')}>Login To Comment</button>}
 
       {comments ? <button onClick={() => setSolutions(!solutions)}>Filter Solution: {solutions ? 'On' : 'Off'}</button> : ''}
 
