@@ -139,8 +139,8 @@ export function AuthProvider(props) {
             const userResponse = await axios.get(baseUrl + getUserUrl, { headers: { token: accessToken } });
             if (userResponse.data) {
                 const newUser = userResponse.data.data;
-                if (user && newUser && newUser.id === user.id && newUser.name === user.name && newUser.email === user.email && newUser.organization === user.organization) {
-                    return user;
+                if (newUser && newUser.email && newUser.username) {
+                    setUser(newUser);
                 } else {
                     setUser(newUser);
                 }

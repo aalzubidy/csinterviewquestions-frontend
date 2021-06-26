@@ -17,7 +17,7 @@ const PostPage = (props) => {
 
   const history = useHistory();
 
-  const { token } = useContext(AuthContext);
+  const { token, user } = useContext(AuthContext);
 
   const { id, title, create_date, interview_date, company, body, position, views } = post;
 
