@@ -17,7 +17,7 @@ const PostPage = (props) => {
 
   const history = useHistory();
 
-  const { token, user } = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
 
   const { id, title, create_date, interview_date, company, body, position, views } = post;
 
@@ -89,7 +89,6 @@ const PostPage = (props) => {
       {comments ? <button onClick={() => setSolutions(!solutions)}>Filter Solution: {solutions ? 'On' : 'Off'}</button> : ''}
 
       {comments ? comments.map((comment) => <CommentCard key={comment.id} comment={comment} deletedComment={postedNewComment} />) : ''}
-
     </div>
   )
 }
