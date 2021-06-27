@@ -88,7 +88,7 @@ const PostPage = (props) => {
 
       {comments ? <button onClick={() => setSolutions(!solutions)}>Filter Solution: {solutions ? 'On' : 'Off'}</button> : ''}
 
-      {comments ? comments.map((comment) => <CommentCard key={comment.id} comment={comment} />) : ''}
+      {comments ? comments.map((comment) => <CommentCard key={comment.id} comment={comment} deletedComment={postedNewComment} />) : ''}
 
     </div>
   )
