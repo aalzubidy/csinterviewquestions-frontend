@@ -28,6 +28,7 @@ const Navbar = () => {
             <button onClick={handleOnClick} name="">Home</button>
             {!token && !user ? <button onClick={handleOnClick} name="login">Login</button> : <button onClick={handleOnClick} name="accountSettings">Account</button>}
             <button onClick={handleOnClick} name="newPost">New Post</button>
+            <button onClick={handleOnClick} name="deletePost">Delete Post</button>
             {token ? <button onClick={handleLogout} name="logout">Logout</button> : ''}
         </div>
     );

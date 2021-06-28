@@ -8,6 +8,7 @@ import HomePage from './components/HomePage';
 import NewPost from './components/NewPost';
 import PostPage from './components/PostPage';
 import LoginForm from './components/LoginForm';
+import DeletePost from './components/DeletePost';
 
 const MainApp = () => {
   // Settings
@@ -42,6 +43,7 @@ const MainApp = () => {
         <Route exact path='/' component={HomePage} />
         <Route exact path='/post/:postId' component={PostPage} />
         <Route exact path='/login' component={LoginForm} />
+        <Route exact path='/deletePost' component={DeletePost} />
         <PrivateRoute exact path='/newPost'>
           <NewPost />
         </PrivateRoute>
