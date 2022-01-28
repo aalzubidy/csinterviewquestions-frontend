@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState, useContext } from 'react';
 import { withRouter, useHistory, useParams } from "react-router-dom";
-import { AuthContext } from '../contexts/AuthContext';
-import Api from '../ApiRequest';
+import { AuthContext } from '../Contexts/AuthContext';
+import API from '../API';
 import CommentCard from './Comment/CommentCard';
 import NewComment from './Comment/NewComment';
 
@@ -26,7 +26,7 @@ const PostPage = (props) => {
 
   const getPost = async () => {
     try {
-      const postResponse = await Api('').get(`/posts/${postId}`);
+      const postResponse = await API('').get(`/posts/${postId}`);
       if (postResponse && postResponse.data) {
         setPost(postResponse.data);
         setLoading(false);
@@ -42,7 +42,7 @@ const PostPage = (props) => {
 
   const getComments = async () => {
     try {
-      const getCommentResponse = await Api('').post(`/comments/post${solutions ? '/solutions' : ''}`, {
+      const getCommentResponse = await API('').post(`/comments/post${solutions ? '/solutions' : ''}`, {
         "postId": id,
         "sortOrder": "asc",
         "limit": 25,

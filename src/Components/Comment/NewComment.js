@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
-import { AuthContext } from '../../contexts/AuthContext';
-import Api from '../../ApiRequest';
+import { AuthContext } from '../../Contexts/AuthContext';
+import API from '../../API';
 
 const NewComment = (props) => {
   const [commentBody, setCommentBody] = useState('');
@@ -10,7 +10,7 @@ const NewComment = (props) => {
   const addComment = async (evt) => {
     evt.preventDefault();
     try {
-      const response = await Api(token).post('/comments', {
+      const response = await API(token).post('/comments', {
         'postId': props.postId,
         'body': commentBody,
         'solution': solutionFlag

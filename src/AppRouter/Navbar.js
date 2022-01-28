@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { withRouter, useHistory } from "react-router-dom";
-import { AuthContext, AuthActionsContext } from './contexts/AuthContext';
+import { AuthContext, AuthActionsContext } from '../Contexts/AuthContext';
 
 const Navbar = () => {
     // Settings

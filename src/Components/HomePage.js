@@ -1,7 +1,7 @@
 import React, { memo, useState, useEffect, useContext } from 'react';
 import { withRouter, useHistory } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext';
-import Api from '../ApiRequest';
+import { AuthContext } from '../Contexts/AuthContext';
+import API from '../API';
 import SearchBar from './HomePage/SearchBar';
 import PostCard from './Post/PostCard';
 
@@ -48,7 +48,7 @@ const HomePage = () => {
         body['position'] = positionsQuery;
       }
 
-      const getPosts = await Api('').post(url, body);
+      const getPosts = await API('').post(url, body);
       setIsLoadedPosts(true);
       setPosts(getPosts.data);
     } else {
@@ -58,7 +58,7 @@ const HomePage = () => {
 
   // Search for all posts in general
   const getAllPosts = async () => {
-    const getPosts = await Api('').post('/posts/all', {
+    const getPosts = await API('').post('/posts/all', {
       "sortKey": sortKey,
       "sortOrder": "desc",
       "limit": 25,

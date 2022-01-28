@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Autosuggest from 'react-autosuggest';
-import Api from '../../ApiRequest';
+import API from '../../API/CustomAxios';
 import './SearchBar.css';
 
 const SearchBar = (props) => {
@@ -10,10 +10,10 @@ const SearchBar = (props) => {
 
   const getFullSuggestions = async () => {
     if (searchField === 'company') {
-      const companies = await Api('').get('/companies');
+      const companies = await API('').get('/companies');
       setFullSuggestions(companies.data);
     } else if (searchField === 'position') {
-      const positions = await Api('').get('/positions');
+      const positions = await API('').get('/positions');
       setFullSuggestions(positions.data);
     } else {
       setFullSuggestions([]);

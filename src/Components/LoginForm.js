@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Redirect, useLocation, useHistory } from "react-router-dom";
-import { AuthContext, AuthActionsContext } from '../contexts/AuthContext';
+import { AuthContext, AuthActionsContext } from '../Contexts/AuthContext';
 
 const LoginForm = (props) => {
   const authActions = useContext(AuthActionsContext);

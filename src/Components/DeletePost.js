@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
-import Api from '../ApiRequest';
+import API from '../API';
 
 const DeletePost = () => {
   const history = useHistory();
@@ -10,7 +10,7 @@ const DeletePost = () => {
   const handleDeletePost = async (evt) => {
     evt.preventDefault();
     try {
-      const response = await Api().post(`/deletePost/${id}`, { postPin });
+      const response = await API().post(`/deletePost/${id}`, { postPin });
       if (response && response.data) {
         alert('Post deleted successfully!');
         history.push('/');

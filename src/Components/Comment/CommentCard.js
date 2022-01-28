@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { withRouter, Redirect, useHistory } from "react-router-dom";
-import { AuthContext } from '../../contexts/AuthContext';
-import Api from '../../ApiRequest';
+import { AuthContext } from '../../Contexts/AuthContext';
+import API from '../../API';
 
 const CommentCard = (props) => {
   const { token, user } = useContext(AuthContext);
@@ -12,7 +12,7 @@ const CommentCard = (props) => {
   const handleDeleteComment = async (evt) => {
     evt.preventDefault();
     try {
-      const response = await Api(token).delete(`/comments/${id}`);
+      const response = await API(token).delete(`/comments/${id}`);
       if (response && response.data) {
         alert('Comment deleted successfully!');
         props.deletedComment();
