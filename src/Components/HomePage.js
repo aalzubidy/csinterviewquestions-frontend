@@ -3,7 +3,7 @@ import { withRouter, useHistory } from 'react-router-dom';
 import { AuthContext } from '../Contexts/AuthContext';
 import API from '../API';
 import SearchBar from './HomePage/SearchBar';
-import PostCard from './Post/PostCard';
+import PostCard from './PostCard';
 
 const HomePage = () => {
   // Settings

@@ -1,33 +1,23 @@
 import React, { memo, useState, useEffect, useContext, useRef } from 'react';
-import { withRouter, useHistory } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { AuthContext } from '../../Contexts/AuthContext';
 import { AlertsContext } from '../../Contexts/AlertsContext';
 import API from '../../API';
-import SearchBar from '../HomePage/SearchBar';
-import PostCard from '../Post/PostCard';
+import PostCard from '../PostCard';
 import BusinessIcon from '@mui/icons-material/Business';
 import WorkIcon from '@mui/icons-material/Work';
-import { Button, Grid, MenuItem, Select, Tooltip } from '@mui/material';
-import SortIcon from '@mui/icons-material/Sort';
+import { Button, Fab, Grid, MenuItem, Select, Tooltip } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import './posts.scss';
 
 const Posts = () => {
   // Settings
-  const history = useHistory();
   let isMounted = useRef(false);
-  const [postsAttempts, setPostsAttempts] = useState(0);
-  const postsAttemptsLimit = 3;
   const { alertMsg } = useContext(AlertsContext);
   const genericError = 'Posts - Uknown error, check console logs for details';
 
-  // Authentication
-  const { token } = useContext(AuthContext);
-
   // Handle search
-  const [searchFor, setSearchFor] = useState('');
-  const [questionsQuery, setQuestionsQuery] = useState('');
   const [selectedCompany, setSelectedCompany] = useState('');
   const [selectedPosition, setSelectedPosition] = useState('');
 
@@ -88,7 +78,6 @@ const Posts = () => {
   const getAllPosts = async () => {
     try {
       if (isMounted) setLoading(true);
-      if (isMounted) setPostsAttempts(postsAttempts + 1);
       const { data } = await API.posts.getAll({
         "sortKey": sortKey,
         "sortOrder": "desc",
@@ -172,7 +161,7 @@ const Posts = () => {
         </Grid>
       </Grid>
 
-      {posts && posts.length > 0 ?
+      {!loading && posts && posts.length > 0 ?
         <Select
           value={sortKey}
           placeholder='Sort by'
@@ -191,6 +180,13 @@ const Posts = () => {
         return <PostCard post={post} key={post.id} />
       }) : ''}
 
+      <div className='newPostButtonDiv'>
+        <Tooltip title='Create new post'>
+          <Fab color="primary" size='large'>
+            <AddIcon />
+          </Fab>
+        </Tooltip>
+      </div>
     </div>
   )
 };
