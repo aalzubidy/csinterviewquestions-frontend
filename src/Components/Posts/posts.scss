@@ -1,13 +1,25 @@
 .postsContainer {
   margin-top: 3%;
 
-  .searchBarLabel {
-    margin-left: 6px;
+  .searchBarDiv {
+    .searchBarLabel {
+      margin-left: 6px;
+    }
   }
 
   .newPostButtonDiv {
     position: fixed;
     bottom: 6%;
     right: 10%;
+  }
+
+  .sortKeyDiv {
+    label {
+      margin-right: 8px;
+    }
+
+    #sortKey {
+      margin-top: 16px;
+    }
   }
 }

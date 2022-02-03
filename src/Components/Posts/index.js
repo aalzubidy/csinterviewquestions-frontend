@@ -117,6 +117,21 @@ const Posts = () => {
     }
   }
 
+  // Autocomplete company - renderInput function
+  const getCompanyRenderInput = (params, labelText) => {
+    return <TextField {...params} label={<Grid container direction="row" alignItems='center'> <BusinessIcon /><span className='searchBarLabel'>{labelText}</span></Grid>} />
+  }
+
+  // Autocomplete position - renderInput function
+  const getPositionRenderInput = (params, labelText) => {
+    return <TextField {...params} label={<Grid container direction="row" alignItems='center'> <WorkIcon /><span className='searchBarLabel'>{labelText}</span></Grid>} />
+  }
+
+  // Check if there are any posts to display
+  const postsAvailable = () => {
+    return !loading && posts && posts.length;
+  }
+
   useEffect(() => {
     isMounted = true;
 
@@ -127,14 +142,14 @@ const Posts = () => {
 
   return (
     <div className='postsContainer'>
-      <Grid container spacing={2} alignItems={'center'}>
+      <Grid container spacing={1} className='searchBarDiv' >
         <Grid item xs={4}>
           <Tooltip title='Search for posts by a company'>
             <Autocomplete
               className="searchCompany"
               freeSolo
               options={companySuggestions}
-              renderInput={(params) => <TextField {...params} label={<Grid container direction="row" alignItems='center'> <BusinessIcon /><span className='searchBarLabel'>Search by Company</span></Grid>} />}
+              renderInput={(params) => getCompanyRenderInput(params, 'Search by Company')}
               onSelect={(evt) => { setSelectedCompany(evt.target.value) }}
               onFocus={() => getCompanies()}
             />
@@ -142,12 +157,12 @@ const Posts = () => {
         </Grid>
 
         <Grid item xs={6}>
-          <Tooltip title='Sort for posts by job title'>
+          <Tooltip title='Search for posts by job title'>
             <Autocomplete
               id="searchPosition"
               freeSolo
               options={positionSuggestions}
-              renderInput={(params) => <TextField {...params} label={<Grid container direction="row" alignItems="center"> <WorkIcon /><span className='searchBarLabel'>Search by Title</span></Grid>} />}
+              renderInput={(params) => getPositionRenderInput(params, 'Search by Title')}
               onSelect={(evt) => { setSelectedPosition(evt.target.value) }}
               onFocus={() => getPositions()}
             />
@@ -161,24 +176,21 @@ const Posts = () => {
         </Grid>
       </Grid>
 
-      {!loading && posts && posts.length > 0 ?
-        <Select
-          value={sortKey}
-          placeholder='Sort by'
-          variant='standard'
-          onChange={handleSortKey}
-          sx={{
-            marginTop: '16px',
-          }}
-        >
-          <MenuItem value='create_date'>Create Date</MenuItem>
-          <MenuItem value='interview_date'>Interview Date</MenuItem>
-          <MenuItem value='views'>Views</MenuItem>
-        </Select> : ''}
+      {postsAvailable() ?
+        <div>
+          <div className='sortKeyDiv'>
+            <label htmlFor='sortKey'>Sort</label>
+            <Select value={sortKey} id='sortKey' placeholder='Sort by' variant='standard' onChange={handleSortKey}>
+              <MenuItem value='create_date'>Create Date</MenuItem>
+              <MenuItem value='interview_date'>Interview Date</MenuItem>
+              <MenuItem value='views'>Views</MenuItem>
+            </Select>
+          </div>
 
-      {posts && posts.length > 0 ? posts.map((post) => {
-        return <PostCard post={post} key={post.id} />
-      }) : ''}
+          {posts.map((post) => {
+            return <PostCard post={post} key={post.id} />
+          })}
+        </div> : ''}
 
       <div className='newPostButtonDiv'>
         <Tooltip title='Create new post'>
