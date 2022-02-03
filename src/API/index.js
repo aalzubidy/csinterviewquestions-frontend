@@ -50,6 +50,24 @@ const API = {
         throw error;
       }
     }
+  },
+  system: {
+    getStatsPositions: async (token = '') => {
+      try {
+        const response = await CustomAxios(token).get('/stats/positions');
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    },
+    getStatsCompanies: async (token = '') => {
+      try {
+        const response = await CustomAxios(token).get('/stats/companies');
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    }
   }
 }
 

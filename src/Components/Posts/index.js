@@ -7,9 +7,10 @@ import API from '../../API';
 import PostCard from '../PostCard';
 import BusinessIcon from '@mui/icons-material/Business';
 import WorkIcon from '@mui/icons-material/Work';
-import { Button, Fab, Grid, MenuItem, Select, Tooltip } from '@mui/material';
+import { Button, Fab, MenuItem, Select, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import './posts.scss';
+import PieChart from '../Stats/PieChart';
 
 const Posts = () => {
   // Settings
@@ -119,12 +120,12 @@ const Posts = () => {
 
   // Autocomplete company - renderInput function
   const getCompanyRenderInput = (params, labelText) => {
-    return <TextField {...params} label={<Grid container direction="row" alignItems='center'> <BusinessIcon /><span className='searchBarLabel'>{labelText}</span></Grid>} />
+    return <TextField {...params} label={<div><BusinessIcon /><span className='searchBarLabel'>{labelText}</span></div>} />;
   }
 
   // Autocomplete position - renderInput function
   const getPositionRenderInput = (params, labelText) => {
-    return <TextField {...params} label={<Grid container direction="row" alignItems='center'> <WorkIcon /><span className='searchBarLabel'>{labelText}</span></Grid>} />
+    return <TextField {...params} label={<div><WorkIcon /><span className='searchBarLabel'>{labelText}</span></div>} />
   }
 
   // Check if there are any posts to display
@@ -141,56 +142,67 @@ const Posts = () => {
   }, [sortKey]);
 
   return (
-    <div className='postsContainer'>
-      <Grid container spacing={1} className='searchBarDiv' >
-        <Grid item xs={4}>
-          <Tooltip title='Search for posts by a company'>
-            <Autocomplete
-              className="searchCompany"
-              freeSolo
-              options={companySuggestions}
-              renderInput={(params) => getCompanyRenderInput(params, 'Search by Company')}
-              onSelect={(evt) => { setSelectedCompany(evt.target.value) }}
-              onFocus={() => getCompanies()}
-            />
-          </Tooltip>
-        </Grid>
-
-        <Grid item xs={6}>
-          <Tooltip title='Search for posts by job title'>
-            <Autocomplete
-              id="searchPosition"
-              freeSolo
-              options={positionSuggestions}
-              renderInput={(params) => getPositionRenderInput(params, 'Search by Title')}
-              onSelect={(evt) => { setSelectedPosition(evt.target.value) }}
-              onFocus={() => getPositions()}
-            />
-          </Tooltip>
-        </Grid>
-
-        <Grid item xs={2}>
-          <Tooltip title='Search for posts'>
-            <Button variant='outlined' color='primary' size='large' onClick={searchPosts}>Search</Button>
-          </Tooltip>
-        </Grid>
-      </Grid>
-
-      {postsAvailable() ?
-        <div>
-          <div className='sortKeyDiv'>
-            <label htmlFor='sortKey'>Sort</label>
-            <Select value={sortKey} id='sortKey' placeholder='Sort by' variant='standard' onChange={handleSortKey}>
-              <MenuItem value='create_date'>Create Date</MenuItem>
-              <MenuItem value='interview_date'>Interview Date</MenuItem>
-              <MenuItem value='views'>Views</MenuItem>
-            </Select>
+    <div className='container-fluid overflow-auto postsContainer'>
+      <div className="row">
+        <div className='col-md-4 mainColumns searchBarDiv'>
+          <div className='searchBox'>
+            <div className='row'>
+              <Tooltip title='Search for posts by a company'>
+                <Autocomplete
+                  className="searchCompany"
+                  freeSolo
+                  options={companySuggestions}
+                  renderInput={(params) => getCompanyRenderInput(params, 'Search by Company')}
+                  onSelect={(evt) => { setSelectedCompany(evt.target.value) }}
+                  onFocus={() => getCompanies()}
+                />
+              </Tooltip>
+            </div>
+            <div className='row'>
+              <Tooltip title='Search for posts by job title'>
+                <Autocomplete
+                  className="searchPosition"
+                  freeSolo
+                  options={positionSuggestions}
+                  renderInput={(params) => getPositionRenderInput(params, 'Search by Title')}
+                  onSelect={(evt) => { setSelectedPosition(evt.target.value) }}
+                  onFocus={() => getPositions()}
+                />
+              </Tooltip>
+            </div>
+            <div className='row searchBtnDiv'>
+              <Tooltip title='Search for posts'>
+                <Button className='searchBtn' variant='outlined' color='primary' onClick={searchPosts}>Search</Button>
+              </Tooltip>
+            </div>
           </div>
+          <div className='row'>
+            <PieChart statType='positions' />
+          </div>
+          <div className='row'>
+            <PieChart statType='companies' />
+          </div>
+        </div>
+        <div className='col mainColumns'>
+          {postsAvailable() ?
+            <div>
+              <div className='sortKeyDiv'>
+                <label htmlFor='sortKey'>Sort</label>
+                <Select value={sortKey} id='sortKey' placeholder='Sort by' variant='standard' onChange={handleSortKey}>
+                  <MenuItem value='create_date'>Create Date</MenuItem>
+                  <MenuItem value='interview_date'>Interview Date</MenuItem>
+                  <MenuItem value='views'>Views</MenuItem>
+                </Select>
+              </div>
 
-          {posts.map((post) => {
-            return <PostCard post={post} key={post.id} />
-          })}
-        </div> : ''}
+              <div>
+                {posts.map((post) => {
+                  return <PostCard post={post} key={post.id} />
+                })}
+              </div>
+            </div> : ''}
+        </div>
+      </div>
 
       <div className='newPostButtonDiv'>
         <Tooltip title='Create new post'>

@@ -1,16 +1,43 @@
 .postsContainer {
-  margin-top: 3%;
+  height: 100vh;
+
+  .mainColumns {
+    padding-top: 3%;
+    height: 99vh;
+  }
 
   .searchBarDiv {
-    .searchBarLabel {
-      margin-left: 6px;
+    .row {
+      margin-bottom: 3%;
+      margin-left: 1%;
+      margin-right: 1%;
+    }
+
+    .searchBox {
+      padding-top: 6%;
+      border: 1px solid rgb(238, 238, 238);
+
+      .searchCompany,
+      .searchPosition {
+        padding: 0;
+      }
+
+      .searchBtnDiv {
+        .searchBtn {
+          width: 100px;
+        }
+      }
+
+      .searchBarLabel {
+        margin-left: 6px;
+      }
     }
   }
 
   .newPostButtonDiv {
     position: fixed;
     bottom: 6%;
-    right: 10%;
+    left: 3%;
   }
 
   .sortKeyDiv {

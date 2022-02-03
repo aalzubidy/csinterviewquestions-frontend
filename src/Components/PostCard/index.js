@@ -1,6 +1,6 @@
 import React from 'react';
-import { withRouter, useHistory } from "react-router-dom";
-import { Button, Card, CardContent, Grid, Tooltip } from '@mui/material';
+import { withRouter, useHistory } from 'react-router-dom';
+import { Button, Tooltip } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import EventIcon from '@mui/icons-material/Event';
@@ -19,35 +19,32 @@ const PostCard = (props) => {
   }
 
   return (
-    <Card className='postCard'>
-      <CardContent>
-
-        <Grid container alignItems={'center'}>
-
-          <Grid item xs={1} textAlign={'center'} className='cardImg'>
-            <img
-              src={`${imagesPath}${company.toLowerCase()}.png`}
-              onError={(e) => { e.target.onError = null; e.target.src = `${imagesPath}company.png` }}
-              alt={`${company} image`}
-            />
-            <h5>{company}</h5>
-          </Grid>
-
-          <Grid item xs={9} className='cardMain'>
-            <h3 onClick={viewPost}>{title}</h3>
-            <h4>{position}</h4>
-            <Tooltip title='Interview date'><Grid container direction="row" alignItems="center"><EventIcon /><span className='iconText'>{interviewDate}</span></Grid></Tooltip>
+    <div className='card postCard'>
+      <div className='card-body'>
+        <div className='row'>
+          <div className='col-lg-1 col-md-2 cardImg'>
+            <figure>
+              <img
+                src={`${imagesPath}${company.toLowerCase()}.png`}
+                onError={(e) => { e.target.onError = null; e.target.src = `${imagesPath}company.png` }}
+                alt={`${company}`}
+              />
+              <figcaption>{company}</figcaption>
+            </figure>
+          </div>
+          <div className='col'>
+            <b onClick={viewPost}>{title}</b>
+            <div>{position}</div>
             <Button size='small' onClick={viewPost}>Read More</Button>
-          </Grid>
-
-          <Grid item xs={2} textAlign={'center'} className='cardMeta'>
-            <Tooltip title='Number of views'><Grid container direction="row" alignItems="center"> <VisibilityIcon color='info' /><span className='iconText'>{views}</span></Grid></Tooltip>
-            <Tooltip title='Post create date'><Grid container direction="row" alignItems="center"> <AccessTimeIcon color='info' /><span className='iconText'>{createDate}</span></Grid></Tooltip>
-          </Grid>
-
-        </Grid>
-      </CardContent>
-    </Card>
+          </div>
+          <div className='col-lg-2 col-md-3'>
+            <Tooltip title='Number of views'><div> <VisibilityIcon color='info' /><span className='iconText'>{views}</span></div></Tooltip>
+            <Tooltip title='Interview date'><div><EventIcon /><span className='iconText'>{interviewDate}</span></div></Tooltip>
+            <Tooltip title='Post create date'><div><AccessTimeIcon color='info' /><span className='iconText'>{createDate}</span></div></Tooltip>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
