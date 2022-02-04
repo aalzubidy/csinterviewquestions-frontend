@@ -2,9 +2,9 @@ import { useEffect, useRef, useState, useContext } from 'react';
 import { ResponsivePie } from '@nivo/pie';
 import { AlertsContext } from '../../../Contexts/AlertsContext';
 import API from '../../../API';
-import './PieChart.scss';
+import './PieChartPosts.scss';
 
-const PieChart = (props) => {
+const PieChartPosts = (props) => {
   // Settings
   let isMounted = useRef(false);
   const { alertMsg } = useContext(AlertsContext);
@@ -212,4 +212,4 @@ const PieChart = (props) => {
   )
 }
 
-export default PieChart;
+export default PieChartPosts;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter, useHistory } from 'react-router-dom';
-import { Button, Tooltip } from '@mui/material';
+import { Button, Tooltip, Typography } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import EventIcon from '@mui/icons-material/Event';
@@ -38,9 +38,9 @@ const PostCard = (props) => {
             <Button size='small' onClick={viewPost}>Read More</Button>
           </div>
           <div className='col-lg-2 col-md-3'>
-            <Tooltip title='Number of views'><div> <VisibilityIcon color='info' /><span className='iconText'>{views}</span></div></Tooltip>
-            <Tooltip title='Interview date'><div><EventIcon /><span className='iconText'>{interviewDate}</span></div></Tooltip>
-            <Tooltip title='Post create date'><div><AccessTimeIcon color='info' /><span className='iconText'>{createDate}</span></div></Tooltip>
+            <Tooltip title='Number of views'><Typography><VisibilityIcon /> {views}</Typography></Tooltip>
+            <Tooltip title='Interview date'><Typography><EventIcon color='info' /> {interviewDate}</Typography></Tooltip>
+            <Tooltip title='Post create date'><Typography><AccessTimeIcon /> {createDate}</Typography></Tooltip>
           </div>
         </div>
       </div>

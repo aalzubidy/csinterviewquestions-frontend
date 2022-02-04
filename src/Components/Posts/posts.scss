@@ -27,17 +27,7 @@
           width: 100px;
         }
       }
-
-      .searchBarLabel {
-        margin-left: 6px;
-      }
     }
-  }
-
-  .newPostButtonDiv {
-    position: fixed;
-    bottom: 6%;
-    left: 3%;
   }
 
   .sortKeyDiv {
@@ -48,5 +38,16 @@
     #sortKey {
       margin-top: 16px;
     }
+  }
+
+  .postsList {
+    height: 86vh;
+    overflow-y: auto;
+  }
+
+  .newPostButtonDiv {
+    position: fixed;
+    bottom: 6%;
+    left: 3%;
   }
 }

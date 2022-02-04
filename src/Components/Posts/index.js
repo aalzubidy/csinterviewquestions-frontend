@@ -7,10 +7,10 @@ import API from '../../API';
 import PostCard from '../PostCard';
 import BusinessIcon from '@mui/icons-material/Business';
 import WorkIcon from '@mui/icons-material/Work';
-import { Button, Fab, MenuItem, Select, Tooltip } from '@mui/material';
+import { Button, Fab, MenuItem, Select, Tooltip, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import './posts.scss';
-import PieChart from '../Stats/PieChart';
+import PieChartPosts from '../Stats/PieChartPosts';
 
 const Posts = () => {
   // Settings
@@ -37,10 +37,10 @@ const Posts = () => {
       setLoading(true);
       if (selectedCompany || selectedPosition) {
         const body = {
-          "sortKey": sortKey,
-          "sortOrder": "desc",
-          "limit": 25,
-          "offset": 0,
+          'sortKey': sortKey,
+          'sortOrder': 'desc',
+          'limit': 25,
+          'offset': 0,
         };
 
         let response = '';
@@ -80,10 +80,10 @@ const Posts = () => {
     try {
       if (isMounted) setLoading(true);
       const { data } = await API.posts.getAll({
-        "sortKey": sortKey,
-        "sortOrder": "desc",
-        "limit": 25,
-        "offset": 0
+        'sortKey': sortKey,
+        'sortOrder': 'desc',
+        'limit': 25,
+        'offset': 0
       });
       if (isMounted) {
         setLoading(false);
@@ -120,12 +120,12 @@ const Posts = () => {
 
   // Autocomplete company - renderInput function
   const getCompanyRenderInput = (params, labelText) => {
-    return <TextField {...params} label={<div><BusinessIcon /><span className='searchBarLabel'>{labelText}</span></div>} />;
+    return <TextField {...params} label={<Typography><BusinessIcon /> {labelText}</Typography>} />;
   }
 
   // Autocomplete position - renderInput function
   const getPositionRenderInput = (params, labelText) => {
-    return <TextField {...params} label={<div><WorkIcon /><span className='searchBarLabel'>{labelText}</span></div>} />
+    return <TextField {...params} label={<Typography><WorkIcon /> {labelText}</Typography>} />
   }
 
   // Check if there are any posts to display
@@ -143,13 +143,13 @@ const Posts = () => {
 
   return (
     <div className='container-fluid overflow-auto postsContainer'>
-      <div className="row">
+      <div className='row'>
         <div className='col-md-4 mainColumns searchBarDiv'>
           <div className='searchBox'>
             <div className='row'>
               <Tooltip title='Search for posts by a company'>
                 <Autocomplete
-                  className="searchCompany"
+                  className='searchCompany'
                   freeSolo
                   options={companySuggestions}
                   renderInput={(params) => getCompanyRenderInput(params, 'Search by Company')}
@@ -161,7 +161,7 @@ const Posts = () => {
             <div className='row'>
               <Tooltip title='Search for posts by job title'>
                 <Autocomplete
-                  className="searchPosition"
+                  className='searchPosition'
                   freeSolo
                   options={positionSuggestions}
                   renderInput={(params) => getPositionRenderInput(params, 'Search by Title')}
@@ -177,10 +177,10 @@ const Posts = () => {
             </div>
           </div>
           <div className='row'>
-            <PieChart statType='positions' />
+            <PieChartPosts statType='positions' />
           </div>
           <div className='row'>
-            <PieChart statType='companies' />
+            <PieChartPosts statType='companies' />
           </div>
         </div>
         <div className='col mainColumns'>
@@ -195,7 +195,7 @@ const Posts = () => {
                 </Select>
               </div>
 
-              <div>
+              <div className='postsList'>
                 {posts.map((post) => {
                   return <PostCard post={post} key={post.id} />
                 })}
@@ -206,7 +206,7 @@ const Posts = () => {
 
       <div className='newPostButtonDiv'>
         <Tooltip title='Create new post'>
-          <Fab color="primary" size='large'>
+          <Fab color='primary' size='large'>
             <AddIcon />
           </Fab>
         </Tooltip>
