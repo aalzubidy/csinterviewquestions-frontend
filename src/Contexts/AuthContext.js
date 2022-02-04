@@ -174,7 +174,7 @@ export function AuthProvider(props) {
             }
         } catch (error) {
             clearToken();
-            throw `Could not generate user pin ${error}`;
+            throw new Error(`Could not generate user pin ${error}`);
         }
     };
 

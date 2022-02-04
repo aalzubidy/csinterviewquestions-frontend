@@ -4,9 +4,8 @@ import { AuthContext, AuthActionsContext } from '../Contexts/AuthContext';
 import PrivateRoute from './PrivateRoute';
 import NotFoundPage from '../Components/NotFoundPage';
 import Posts from '../Components/Posts';
-import HomePage from '../Components/HomePage';
 import NewPost from '../Components/NewPost';
-import PostPage from '../Components/PostPage';
+import PostDetails from '../Components/PostDetails';
 import LoginForm from '../Components/LoginForm';
 import DeletePost from '../Components/DeletePost';
 import Paths from "./Paths";
@@ -33,7 +32,7 @@ const AppRouter = () => {
         // console.log('No refresh token stored, all good, you don\'t need to do anything about it');
       })
     }
-    
+
     return () => isMounted = false;
   }, [token])
 
@@ -41,7 +40,7 @@ const AppRouter = () => {
     <Router>
       <Switch>
         <Route exact path={Paths.home} component={Posts} />
-        <Route exact path={Paths.postPage} component={PostPage} />
+        <Route exact path={Paths.postDetails} component={PostDetails} />
         <Route exact path={Paths.loginRegister} component={LoginForm} />
         <Route exact path={Paths.deletePostComment} component={DeletePost} />
         <PrivateRoute exact path={Paths.newPost}>

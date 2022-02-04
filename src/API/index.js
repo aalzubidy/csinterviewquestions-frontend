@@ -49,7 +49,33 @@ const API = {
       } catch (error) {
         throw error;
       }
-    }
+    },
+    getById: async (postId, token = '') => {
+      try {
+        const response = await CustomAxios(token).get(`/posts/${postId}`);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    },
+  },
+  comments: {
+    getAllByPost: async (body, token = '') => {
+      try {
+        const response = await CustomAxios(token).post('/comments/post', body);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    },
+    getSolutionsByPost: async (body, token = '') => {
+      try {
+        const response = await CustomAxios(token).post('/comments/post/solutions', body);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    },
   },
   system: {
     getStatsPositions: async (token = '') => {

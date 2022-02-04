@@ -27,7 +27,7 @@ const Posts = () => {
   const [positionSuggestions, setPositionSuggestions] = useState([]);
 
   // Handle posts
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [sortKey, setSortKey] = useState('create_date');
 
@@ -133,6 +133,13 @@ const Posts = () => {
     return !loading && posts && posts.length;
   }
 
+  // Get list of posts
+  const getPostCards = () => {
+    return posts.map((post) => {
+      return <PostCard post={post} key={post.id} />
+    })
+  }
+
   useEffect(() => {
     isMounted = true;
 
@@ -196,9 +203,7 @@ const Posts = () => {
               </div>
 
               <div className='postsList'>
-                {posts.map((post) => {
-                  return <PostCard post={post} key={post.id} />
-                })}
+                {getPostCards()}
               </div>
             </div> : ''}
         </div>

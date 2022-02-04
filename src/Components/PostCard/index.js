@@ -8,14 +8,14 @@ import './postCard.scss';
 
 const PostCard = (props) => {
   const { id, title, create_date, interview_date, company, position, views } = props.post;
-  const imagesPath = '/images/companies/';
+  const companiesImagesPath = '/images/companies/';
   const createDate = new Date(create_date).toISOString().substring(0, 10);
   const interviewDate = new Date(interview_date).toISOString().substring(0, 10);
 
   const history = useHistory();
 
   const viewPost = () => {
-    history.push(`/post/${id}`);
+    history.push(`/posts/${id}`);
   }
 
   return (
@@ -25,8 +25,8 @@ const PostCard = (props) => {
           <div className='col-lg-1 col-md-2 cardImg'>
             <figure>
               <img
-                src={`${imagesPath}${company.toLowerCase()}.png`}
-                onError={(e) => { e.target.onError = null; e.target.src = `${imagesPath}company.png` }}
+                src={`${companiesImagesPath}${company.toLowerCase()}.png`}
+                onError={(e) => { e.target.onError = null; e.target.src = `${companiesImagesPath}company.png` }}
                 alt={`${company}`}
               />
               <figcaption>{company}</figcaption>
