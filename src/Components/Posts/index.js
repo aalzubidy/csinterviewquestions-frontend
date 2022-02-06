@@ -9,8 +9,8 @@ import BusinessIcon from '@mui/icons-material/Business';
 import WorkIcon from '@mui/icons-material/Work';
 import { Button, Fab, MenuItem, Select, Tooltip, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import './posts.scss';
 import PieChartPosts from '../Stats/PieChartPosts';
+import './posts.scss';
 
 const Posts = () => {
   // Settings

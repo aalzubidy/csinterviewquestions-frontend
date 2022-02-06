@@ -1,14 +1,16 @@
 import React, { memo, useEffect, useState, useContext, useRef } from 'react';
-import { withRouter, useHistory, useParams } from 'react-router-dom';
+import { withRouter, useParams } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import EventIcon from '@mui/icons-material/Event';
-import { Tooltip } from '@mui/material';
+import { Tooltip, Fab } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import { AlertsContext } from '../../Contexts/AlertsContext';
 import API from '../../API';
-import CommentCard from '../Comment/CommentCard';
-import NewComment from '../Comment/NewComment';
+import CommentCard from '../CommentCard';
+// import NewComment from '../Comment/NewComment';
 import './postDetails.scss';
+import LoadingScreen from '../LoadingScreen';
 
 const PostDetails = (props) => {
   // Settings
@@ -25,11 +27,9 @@ const PostDetails = (props) => {
 
   // Handle comments
   const [comments, setComments] = useState('');
-  const [solutions, setSolutions] = useState(false);
+  // const [solutions, setSolutions] = useState(false);
 
-  const history = useHistory();
-
-  const { id, title, create_date, interview_date, company, body, position, views } = post;
+  const { title, create_date, interview_date, company, body, position, views } = post;
 
   const createDate = create_date ? new Date(create_date).toISOString().substring(0, 10) : '';
   const interviewDate = interview_date ? new Date(interview_date).toISOString().substring(0, 10) : '';
@@ -83,13 +83,13 @@ const PostDetails = (props) => {
     getComments();
 
     return () => isMounted = false;
-  }, [postId, solutions]);
+  }, [postId]);
 
   return (
     <div className='container-fluid postDetailsContainer'>
       <div className='row'>
-        {loading ? <h4>Loading...</h4> : ''}
-        
+        {loading ? <LoadingScreen /> : ''}
+
         {postSearchStatus === 'not found' ? <h1>Sorry cannot find a post</h1> : ''}
 
         {postSearchStatus === 'found' ? <div className='container-fluid'>
@@ -128,13 +128,26 @@ const PostDetails = (props) => {
           </div>
         </div> : ''}
 
-        {postSearchStatus === 'found' && comments && comments.length > 0 ? <div>
+        {postSearchStatus === 'found' && comments && comments.length > 0 ? <div className='row commentsRow'>
 
-          <NewComment postId={id} postedNewComment={postedNewComment} /> : <button onClick={() => history.push('/login')}>Login To Comment</button>
+          <div className='col-sm-1'>
+            <div className='newCommentButtonDiv'>
+              <Tooltip title='Add new comment'>
+                <Fab color='primary' size='large'>
+                  <AddIcon />
+                </Fab>
+              </Tooltip>
+            </div>
+          </div>
 
-          <button onClick={() => setSolutions(!solutions)}>Filter Solution: {solutions ? 'On' : 'Off'}</button>
+          <div className='col-sm-10'>
+            {comments.map((comment) => <CommentCard key={comment.id} comment={comment} deletedComment={postedNewComment} />)}
+          </div>
 
-          {comments.map((comment) => <CommentCard key={comment.id} comment={comment} deletedComment={postedNewComment} />)}
+          {/* <NewComment postId={id} postedNewComment={postedNewComment} /> : <button onClick={() => history.push('/login')}>Login To Comment</button> */}
+
+          {/* <button onClick={() => setSolutions(!solutions)}>Filter Solution: {solutions ? 'On' : 'Off'}</button> */}
+
 
         </div> : ''}
       </div>

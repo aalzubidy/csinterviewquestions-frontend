@@ -76,6 +76,14 @@ const API = {
         throw error;
       }
     },
+    deleteById: async (commentId, token = '') => {
+      try {
+        const response = await CustomAxios(token).delete(`/comments/${commentId}`);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    },
   },
   system: {
     getStatsPositions: async (token = '') => {
