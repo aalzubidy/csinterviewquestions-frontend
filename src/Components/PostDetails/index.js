@@ -27,7 +27,7 @@ const PostDetails = (props) => {
 
   // Handle comments
   const [comments, setComments] = useState('');
-  // const [solutions, setSolutions] = useState(false);
+  const [solutions, setSolutions] = useState(false);
 
   const { title, create_date, interview_date, company, body, position, views } = post;
 
@@ -37,12 +37,14 @@ const PostDetails = (props) => {
   // Get post information
   const getPost = async () => {
     try {
-      if (isMounted) setLoading(true);
-      const { data } = await API.posts.getById(postId);
-      if (isMounted) {
-        setLoading(false);
-        setPost(data);
-        setPostSearchStatus('found');
+      if (!post) {
+        if (isMounted) setLoading(true);
+        const { data } = await API.posts.getById(postId);
+        if (isMounted) {
+          setLoading(false);
+          setPost(data);
+          setPostSearchStatus('found');
+        }
       }
     } catch (error) {
       alertMsg('error', 'could not get post information', error.message || genericError, error);
@@ -57,13 +59,23 @@ const PostDetails = (props) => {
   // Get post's comments
   const getComments = async () => {
     try {
-      const { data } = await API.comments.getAllByPost({
-        'postId': postId,
-        'sortOrder': 'asc',
-        'limit': 25,
-        'offset': 0
-      });
-      if (isMounted) setComments(data);
+      if (solutions) {
+        const { data } = await API.comments.getSolutionsByPost({
+          'postId': postId,
+          'sortOrder': 'asc',
+          'limit': 25,
+          'offset': 0
+        });
+        if (isMounted) setComments(data);
+      } else {
+        const { data } = await API.comments.getAllByPost({
+          'postId': postId,
+          'sortOrder': 'asc',
+          'limit': 25,
+          'offset': 0
+        });
+        if (isMounted) setComments(data);
+      }
     } catch (error) {
       alertMsg('error', 'could not get comments information', error.message || genericError, error);
       if (isMounted) {
@@ -83,7 +95,7 @@ const PostDetails = (props) => {
     getComments();
 
     return () => isMounted = false;
-  }, [postId]);
+  }, [postId, solutions]);
 
   return (
     <div className='container-fluid postDetailsContainer'>
@@ -130,7 +142,16 @@ const PostDetails = (props) => {
 
         {postSearchStatus === 'found' && comments && comments.length > 0 ? <div className='row commentsRow'>
 
-          <div className='col-sm-1'>
+          <div className='col-sm-2'>
+            <div className="form-check form-switch solutionsSwitchDiv">
+              <Tooltip title='Filter comments and display only comments that contain a solution'>
+                <div>
+                  <label className="form-check-label" for="flexSwitchCheckDefault">Show Solutions Only</label>
+                  <input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault" value={solutions} checked={solutions} onChange={() => setSolutions(!solutions)} />
+                </div>
+              </Tooltip>
+            </div>
+
             <div className='newCommentButtonDiv'>
               <Tooltip title='Add new comment'>
                 <Fab color='primary' size='large'>
@@ -145,9 +166,6 @@ const PostDetails = (props) => {
           </div>
 
           {/* <NewComment postId={id} postedNewComment={postedNewComment} /> : <button onClick={() => history.push('/login')}>Login To Comment</button> */}
-
-          {/* <button onClick={() => setSolutions(!solutions)}>Filter Solution: {solutions ? 'On' : 'Off'}</button> */}
-
 
         </div> : ''}
       </div>
