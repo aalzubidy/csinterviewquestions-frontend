@@ -6,18 +6,22 @@ import EventIcon from '@mui/icons-material/Event';
 import { Tooltip, Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { AlertsContext } from '../../Contexts/AlertsContext';
+import { AuthContext } from '../../Contexts/AuthContext';
 import API from '../../API';
 import CommentCard from '../CommentCard';
 // import NewComment from '../Comment/NewComment';
 import './postDetails.scss';
 import LoadingScreen from '../LoadingScreen';
+import { useHistory } from 'react-router-dom';
 
-const PostDetails = (props) => {
+const PostDetails = () => {
   // Settings
   let isMounted = useRef(false);
   const { alertMsg } = useContext(AlertsContext);
   const companiesImagesPath = '/images/companies/';
   const genericError = 'Post Details - Uknown error, check console logs for details';
+  const history = useHistory();
+  const { token } = useContext(AuthContext);
 
   // Handle post data
   const { postId } = useParams();
@@ -88,6 +92,14 @@ const PostDetails = (props) => {
     getComments();
   }
 
+  const handleNewComment = () => {
+    if (!token) {
+      history.push('/login');
+    } else {
+      console.log('not implemented yet');
+    }
+  }
+
   useEffect(() => {
     isMounted = true;
 
@@ -155,7 +167,7 @@ const PostDetails = (props) => {
             <div className='newCommentButtonDiv'>
               <Tooltip title='Add new comment'>
                 <Fab color='primary' size='large'>
-                  <AddIcon />
+                  <AddIcon onClick={handleNewComment} />
                 </Fab>
               </Tooltip>
             </div>
@@ -164,37 +176,8 @@ const PostDetails = (props) => {
           <div className='col-sm-10'>
             {comments.map((comment) => <CommentCard key={comment.id} comment={comment} deletedComment={postedNewComment} />)}
           </div>
-
-          {/* <NewComment postId={id} postedNewComment={postedNewComment} /> : <button onClick={() => history.push('/login')}>Login To Comment</button> */}
-
         </div> : ''}
       </div>
-
-
-      {/* {loading ? <h1>Loading ...</h1> : ''}
-
-      {postNotFound === false && post && !loading ? <h1>Hello {id} from post page</h1> : ''}
-
-      {postNotFound && !loading ? <h1>Sorry cannot find post</h1> : ''}
-
-      {postNotFound === false && post && !loading ?
-        <div>
-          ID : {id} < br />
-          Title: {title} <br />
-          Create Date {createDate} <br />
-          Interview Date: {interviewDate} <br />
-          Company: {company} <br />
-          Position: {position} <br />
-          Views: {views} <br />
-          Body: {body} <br />
-          <hr />
-        </div> : ''}
-
-      {postNotFound === false && post && !loading && token ? <NewComment postId={id} postedNewComment={postedNewComment} /> : <button onClick={() => history.push('/login')}>Login To Comment</button>}
-
-      {comments ? <button onClick={() => setSolutions(!solutions)}>Filter Solution: {solutions ? 'On' : 'Off'}</button> : ''}
-
-      {comments ? comments.map((comment) => <CommentCard key={comment.id} comment={comment} deletedComment={postedNewComment} />) : ''} */}
     </div >
   )
 }
