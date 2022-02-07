@@ -1,0 +1,36 @@
+.newCommentContainer {
+  position: absolute;
+  width: 60%;
+  height: 600px;
+  top: 20%;
+  left: 20%;
+  // margin: -200px 0 0 -300px;
+  background-color: white;
+  // border: 1px solid grey;
+  box-shadow: 0px 0px 30px 10px rgb(201, 201, 201);
+  padding: 1%;
+
+  .commentOptions {
+    margin-top: 1%;
+    margin-bottom: 1%;
+    padding-left: 14px;
+  }
+
+  .commentInput {
+    min-height: 460px;
+    max-height: 460px;
+    height: 460px;
+
+    textarea {
+      min-height: 460px;
+      max-height: 460px;
+      height: 460px;
+    }
+  }
+
+  .actions {
+    text-align: right;
+    margin-top: 2%;
+    margin-bottom: 2%;
+  }
+}

@@ -9,7 +9,7 @@ import { AlertsContext } from '../../Contexts/AlertsContext';
 import { AuthContext } from '../../Contexts/AuthContext';
 import API from '../../API';
 import CommentCard from '../CommentCard';
-// import NewComment from '../Comment/NewComment';
+import NewComment from '../NewComment';
 import './postDetails.scss';
 import LoadingScreen from '../LoadingScreen';
 import { useHistory } from 'react-router-dom';
@@ -32,6 +32,7 @@ const PostDetails = () => {
   // Handle comments
   const [comments, setComments] = useState('');
   const [solutions, setSolutions] = useState(false);
+  const [newCommentDialog, setNewCommentDialog] = useState(false);
 
   const { title, create_date, interview_date, company, body, position, views } = post;
 
@@ -88,15 +89,11 @@ const PostDetails = () => {
     }
   }
 
-  const postedNewComment = async () => {
-    getComments();
-  }
-
   const handleNewComment = () => {
     if (!token) {
       history.push('/login');
     } else {
-      console.log('not implemented yet');
+      setNewCommentDialog(true);
     }
   }
 
@@ -107,7 +104,7 @@ const PostDetails = () => {
     getComments();
 
     return () => isMounted = false;
-  }, [postId, solutions]);
+  }, [postId, solutions, newCommentDialog]);
 
   return (
     <div className='container-fluid postDetailsContainer'>
@@ -150,6 +147,16 @@ const PostDetails = () => {
               <div>No attachments</div>
             </div>
           </div>
+
+          <div className='newCommentButtonDiv'>
+            <Tooltip title='Add new comment'>
+              <Fab color='primary' size='large'>
+                <AddIcon onClick={handleNewComment} />
+              </Fab>
+            </Tooltip>
+          </div>
+
+          <NewComment postId={postId} newCommentDialog={newCommentDialog} setNewCommentDialog={setNewCommentDialog} />
         </div> : ''}
 
         {postSearchStatus === 'found' && comments && comments.length > 0 ? <div className='row commentsRow'>
@@ -163,18 +170,10 @@ const PostDetails = () => {
                 </div>
               </Tooltip>
             </div>
-
-            <div className='newCommentButtonDiv'>
-              <Tooltip title='Add new comment'>
-                <Fab color='primary' size='large'>
-                  <AddIcon onClick={handleNewComment} />
-                </Fab>
-              </Tooltip>
-            </div>
           </div>
 
           <div className='col-sm-10'>
-            {comments.map((comment) => <CommentCard key={comment.id} comment={comment} deletedComment={postedNewComment} />)}
+            {comments.map((comment) => <CommentCard key={comment.id} comment={comment} />)}
           </div>
         </div> : ''}
       </div>

@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react';
-import { withRouter } from "react-router-dom";
 import { Tooltip } from '@mui/material';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -32,4 +31,4 @@ const CommentCard = (props) => {
   )
 }
 
-export default withRouter(CommentCard);
+export default CommentCard;

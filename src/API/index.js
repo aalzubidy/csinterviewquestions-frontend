@@ -84,6 +84,14 @@ const API = {
         throw error;
       }
     },
+    newComment: async (body, token = '') => {
+      try {
+        const response = await CustomAxios(token).post('/comments', body);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    },
   },
   system: {
     getStatsPositions: async (token = '') => {
