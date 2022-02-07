@@ -3,7 +3,7 @@ import { Route, BrowserRouter as Router, Switch, useHistory } from "react-router
 import { AuthContext, AuthActionsContext } from '../Contexts/AuthContext';
 import PrivateRoute from './PrivateRoute';
 import NotFoundPage from '../Components/NotFoundPage';
-import Posts from '../Components/Posts';
+import Homepage from '../Components/Homepage';
 import NewPost from '../Components/NewPost';
 import PostDetails from '../Components/PostDetails';
 import Login from '../Components/Login';
@@ -39,7 +39,7 @@ const AppRouter = () => {
   return (
     <Router>
       <Switch>
-        <Route exact path={Paths.home} component={Posts} />
+        <Route exact path={Paths.home} component={Homepage} />
         <Route exact path={Paths.postDetails} component={PostDetails} />
         <Route exact path={Paths.loginRegister} component={Login} />
         <Route exact path={Paths.deletePostComment} component={DeletePost} />
