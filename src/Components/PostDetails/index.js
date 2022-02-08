@@ -89,6 +89,7 @@ const PostDetails = () => {
     }
   }
 
+  // Handle new comment
   const handleNewComment = () => {
     if (!token) {
       history.push('/login');

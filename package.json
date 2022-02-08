@@ -1,11 +1,12 @@
 {
   "name": "csinterviewquestions",
-  "version": "0.1.37",
+  "version": "0.1.38",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@mui/icons-material": "^5.2.5",
+    "@mui/lab": "^5.0.0-alpha.67",
     "@mui/material": "^5.2.7",
     "@nivo/api": "^0.74.1",
     "@testing-library/jest-dom": "^5.11.4",

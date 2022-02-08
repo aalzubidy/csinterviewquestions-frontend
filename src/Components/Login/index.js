@@ -79,18 +79,9 @@ const Login = () => {
 
   // Check if there is a stored refresh token
   const checkRefreshToken = async () => {
-    try {
-      if (!token) {
-        const results = await authActions.renewToken();
-        if (results) {
-          state ? history.push(state.from) : history.push('/');
-        }
-      } else {
-        setRedirectReday(false);
-      }
-    } catch (error) {
-      setRedirectReday(false);
-    }
+    if (token) {
+      state ? history.push(state.from) : history.push('/');
+    };
   }
 
   useEffect(() => {

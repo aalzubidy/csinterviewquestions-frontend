@@ -1,8 +1,9 @@
 import React, { memo, useState, useEffect, useContext, useRef } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useHistory, withRouter } from 'react-router-dom';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { AlertsContext } from '../../Contexts/AlertsContext';
+import { AuthContext } from '../../Contexts/AuthContext';
 import API from '../../API';
 import PostCard from '../PostCard';
 import BusinessIcon from '@mui/icons-material/Business';
@@ -11,12 +12,15 @@ import { Button, Fab, MenuItem, Select, Tooltip, Typography } from '@mui/materia
 import AddIcon from '@mui/icons-material/Add';
 import PieChartPosts from '../Stats/PieChartPosts';
 import './posts.scss';
+import NewPost from '../NewPost';
 
 const Posts = () => {
   // Settings
   let isMounted = useRef(false);
   const { alertMsg } = useContext(AlertsContext);
   const genericError = 'Posts - Uknown error, check console logs for details';
+  const { token } = useContext(AuthContext);
+  const history = useHistory();
 
   // Handle search
   const [selectedCompany, setSelectedCompany] = useState('');
@@ -30,6 +34,7 @@ const Posts = () => {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [sortKey, setSortKey] = useState('create_date');
+  const [newPostDialog, setNewPostDialog] = useState(false);
 
   // Search for company and/or position posts
   const searchPosts = async () => {
@@ -140,6 +145,15 @@ const Posts = () => {
     })
   }
 
+  // Handle new post
+  const handleNewPost = () => {
+    if (!token) {
+      history.push('/login');
+    } else {
+      setNewPostDialog(true);
+    }
+  }
+
   useEffect(() => {
     isMounted = true;
 
@@ -150,6 +164,9 @@ const Posts = () => {
 
   return (
     <div className='container-fluid overflow-auto postsContainer'>
+
+      <NewPost newPostDialog={newPostDialog} setNewPostDialog={setNewPostDialog} />
+
       <div className='row'>
         <div className='col-md-4 mainColumns searchBarDiv'>
           <div className='searchBox'>
@@ -212,7 +229,7 @@ const Posts = () => {
       <div className='newPostButtonDiv'>
         <Tooltip title='Create new post'>
           <Fab color='primary' size='large'>
-            <AddIcon />
+            <AddIcon onClick={handleNewPost} />
           </Fab>
         </Tooltip>
       </div>

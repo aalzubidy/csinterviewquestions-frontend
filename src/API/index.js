@@ -58,6 +58,14 @@ const API = {
         throw error;
       }
     },
+    newPost: async (body, token = '') => {
+      try {
+        const response = await CustomAxios(token).post('/posts', body);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    },
   },
   comments: {
     getAllByPost: async (body, token = '') => {
