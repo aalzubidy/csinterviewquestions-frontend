@@ -13,6 +13,7 @@ import NewComment from '../NewComment';
 import './postDetails.scss';
 import LoadingScreen from '../LoadingScreen';
 import { useHistory } from 'react-router-dom';
+import SiteFooter from '../SiteFooter';
 
 const PostDetails = () => {
   // Settings
@@ -178,6 +179,8 @@ const PostDetails = () => {
           </div>
         </div> : ''}
       </div>
+
+      <SiteFooter />
     </div >
   )
 }

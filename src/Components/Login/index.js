@@ -4,6 +4,7 @@ import { Tooltip, Button } from '@mui/material';
 import { AuthContext, AuthActionsContext } from '../../Contexts/AuthContext';
 import { AlertsContext } from '../../Contexts/AlertsContext';
 import './login.scss';
+import SiteFooter from '../SiteFooter';
 
 const Login = () => {
   // Settings
@@ -133,6 +134,8 @@ const Login = () => {
         </div>
 
       </div>
+
+      <SiteFooter />
     </div>
   )
 }

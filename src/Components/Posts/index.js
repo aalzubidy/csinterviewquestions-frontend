@@ -13,6 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import PieChartPosts from '../Stats/PieChartPosts';
 import './posts.scss';
 import NewPost from '../NewPost';
+import SiteFooter from '../SiteFooter';
 
 const Posts = () => {
   // Settings
@@ -233,6 +234,8 @@ const Posts = () => {
           </Fab>
         </Tooltip>
       </div>
+
+      <SiteFooter />
     </div>
   )
 };
