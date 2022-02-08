@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import { Route, BrowserRouter as Router, Switch, useHistory } from "react-router-dom";
 import { AuthContext, AuthActionsContext } from '../Contexts/AuthContext';
 import PrivateRoute from './PrivateRoute';
-import NotFoundPage from '../Components/NotFoundPage';
+import NotFound from '../Components/NotFound';
 import Homepage from '../Components/Homepage';
 import NewPost from '../Components/NewPost';
 import PostDetails from '../Components/PostDetails';
@@ -46,7 +46,7 @@ const AppRouter = () => {
         <PrivateRoute exact path={Paths.newPost}>
           <NewPost />
         </PrivateRoute>
-        <Route render={() => <NotFoundPage />} />
+        <Route render={() => <NotFound />} />
       </Switch>
     </Router>
   )
