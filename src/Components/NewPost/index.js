@@ -183,7 +183,7 @@ const NewPost = (props) => {
             </div>
           </div>
           <div className='row newPostActionRow'>
-            <div class='col'>
+            <div className='col'>
               <Button onClick={() => setNewPostDialog(false)}>Cancel</Button>
               <Button variant='outlined' onClick={handleNewPost} disabled={disablePostButton}>Post</Button>
             </div>

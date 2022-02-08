@@ -32,24 +32,27 @@ const Posts = () => {
   const [positionSuggestions, setPositionSuggestions] = useState([]);
 
   // Handle posts
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([]);
   const [sortKey, setSortKey] = useState('create_date');
   const [newPostDialog, setNewPostDialog] = useState(false);
+  const listInnerRef = useRef();
+  const [postsLimit, setPostsLimit] = useState(25);
+  const [postsOffset, setPostsOffset] = useState(0);
 
   // Search for company and/or position posts
-  const searchPosts = async () => {
+  const searchPosts = async (replaceResults, postsLimit = 25, postsOffset = 0) => {
     try {
-      setLoading(true);
-      if (selectedCompany || selectedPosition) {
-        const body = {
-          'sortKey': sortKey,
-          'sortOrder': 'desc',
-          'limit': 25,
-          'offset': 0,
-        };
+      // setLoading(true);
+      const body = {
+        'sortKey': sortKey,
+        'sortOrder': 'desc',
+        'limit': postsLimit,
+        'offset': postsOffset,
+      };
 
-        let response = '';
+      let response = '';
+      if (selectedCompany || selectedPosition) {
         if (selectedCompany && !selectedPosition) {
           body['company'] = selectedCompany;
           response = await API.posts.getByCompany(body);
@@ -61,14 +64,22 @@ const Posts = () => {
           body['position'] = selectedPosition;
           response = await API.posts.getByCompanyPosition(body);
         }
-
-        setPosts(response ? response.data : []);
       } else {
-        getAllPosts();
+        response = await API.posts.getAll(body);
       }
-      setLoading(false);
+
+      if (response.data && isMounted && replaceResults) {
+        console.log(response.data);
+        setPosts(response.data);
+      } else if (response.data && isMounted && !replaceResults) {
+        let newPosts = posts.concat(response.data);
+        newPosts = newPosts.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+        console.log(newPosts);
+        setPosts(newPosts);
+      }
+      // setLoading(false);
     } catch (error) {
-      setLoading(false);
+      // setLoading(false);
       alertMsg('error', 'Could not search for posts', error.message || genericError, error);
     }
   }
@@ -78,29 +89,6 @@ const Posts = () => {
     evt.preventDefault();
     if (isMounted) {
       setSortKey(evt.target.value);
-    }
-  }
-
-  // Search for all posts in general
-  const getAllPosts = async () => {
-    try {
-      if (isMounted) setLoading(true);
-      const { data } = await API.posts.getAll({
-        'sortKey': sortKey,
-        'sortOrder': 'desc',
-        'limit': 25,
-        'offset': 0
-      });
-      if (isMounted) {
-        setLoading(false);
-        setPosts(data);
-      }
-    } catch (error) {
-      alertMsg('error', 'could not get posts', error.message || genericError, error);
-      if (isMounted) {
-        setLoading(false);
-        setPosts([]);
-      }
     }
   }
 
@@ -136,7 +124,7 @@ const Posts = () => {
 
   // Check if there are any posts to display
   const postsAvailable = () => {
-    return !loading && posts && posts.length;
+    return posts && posts.length;
   }
 
   // Get list of posts
@@ -155,10 +143,22 @@ const Posts = () => {
     }
   }
 
+  // Track scroll in post list div
+  const onScroll = () => {
+    if (listInnerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+      if (scrollTop + clientHeight === scrollHeight) {
+        setPostsLimit(postsLimit + 25);
+        setPostsOffset(postsOffset + 25);
+        searchPosts(false, postsLimit + 25, postsOffset + 25);
+      }
+    }
+  };
+
   useEffect(() => {
     isMounted = true;
 
-    getAllPosts();
+    searchPosts(true);
 
     return () => { isMounted = false }
   }, [sortKey]);
@@ -197,7 +197,7 @@ const Posts = () => {
             </div>
             <div className='row searchBtnDiv'>
               <Tooltip title='Search for posts'>
-                <Button className='searchBtn' variant='outlined' color='primary' onClick={searchPosts}>Search</Button>
+                <Button className='searchBtn' variant='outlined' color='primary' onClick={() => searchPosts(true)}>Search</Button>
               </Tooltip>
             </div>
           </div>
@@ -220,7 +220,7 @@ const Posts = () => {
                 </Select>
               </div>
 
-              <div className='postsList'>
+              <div className='postsList' onScroll={() => onScroll()} ref={listInnerRef}>
                 {getPostCards()}
               </div>
             </div> : ''}
