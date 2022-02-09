@@ -4,7 +4,6 @@ import { Modal, Button, Tooltip, TextField } from '@mui/material';
 import { AuthContext } from '../../Contexts/AuthContext';
 import { AlertsContext } from '../../Contexts/AlertsContext';
 import API from '../../API';
-import 'react-day-picker/lib/style.css';
 import './newPost.scss';
 
 const NewPost = (props) => {
