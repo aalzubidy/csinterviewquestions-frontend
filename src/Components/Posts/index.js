@@ -230,7 +230,7 @@ const Posts = () => {
       </div>
 
       <div className='newPostButtonDiv'>
-        <Tooltip title='Create new post'>
+        <Tooltip title='Create new post (anonymously)'>
           <Fab color='primary' size='large'>
             <AddIcon onClick={handleNewPost} />
           </Fab>

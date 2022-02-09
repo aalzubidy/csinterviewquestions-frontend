@@ -179,10 +179,13 @@ const NewPost = (props) => {
 
             </div>
             <div className='col col-md newPostBodyCol'>
-              <textarea type="text" className='form-control' placeholder="Tell us more about your interview quesiton *" value={body} onChange={(evt) => setBody(evt.target.value)} required />
+              <textarea type="text" className='form-control' placeholder="Tell us more about your interview quesiton, and you can use markdown! *" value={body} onChange={(evt) => setBody(evt.target.value)} required />
             </div>
           </div>
           <div className='row newPostActionRow'>
+            <div className='col privacyMsgDiv'>
+              Reminder: your post is anonymous, your email and username will not be displayed on the post. Please, only post questions you had in an actual interview. Thank you!
+            </div>
             <div className='col'>
               <Button onClick={() => setNewPostDialog(false)}>Cancel</Button>
               <Button variant='outlined' onClick={handleNewPost} disabled={disablePostButton}>Post</Button>

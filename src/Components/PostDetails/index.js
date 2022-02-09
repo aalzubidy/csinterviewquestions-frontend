@@ -5,6 +5,8 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import EventIcon from '@mui/icons-material/Event';
 import { Tooltip, Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { AlertsContext } from '../../Contexts/AlertsContext';
 import { AuthContext } from '../../Contexts/AuthContext';
 import API from '../../API';
@@ -167,7 +169,7 @@ const PostDetails = () => {
 
             <div className='col postDetailsMain'>
               <div><h4>{title}</h4></div>
-              <div className='body'>{body}</div>
+              <div className='body'><ReactMarkdown children={body} remarkPlugins={[remarkGfm]} /></div>
             </div>
 
             <div className='col-lg-2 col-md-3 postDetailsExtra'>
