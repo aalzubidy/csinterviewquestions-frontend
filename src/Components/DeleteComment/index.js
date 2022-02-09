@@ -35,9 +35,9 @@ const DeleteComment = (props) => {
       fullScreen={fullScreen}
       open={displayDeleteDialog}
       onClose={() => setDisplayDeleteDialog(false)}
-      aria-labelledby="responsive-dialog-title"
+      aria-labelledby='responsive-dialog-title'
     >
-      <DialogTitle id="responsive-dialog-title">
+      <DialogTitle id='responsive-dialog-title'>
         Delete Comment: {commentId}
       </DialogTitle>
       <DialogContent>

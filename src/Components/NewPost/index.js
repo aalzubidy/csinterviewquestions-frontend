@@ -137,11 +137,11 @@ const NewPost = (props) => {
             <div className='col col-md-3 newPostFormCol'>
 
               <Tooltip title='Enter title for the post'>
-                <input type='text' className='form-control formItem' placeholder="Post's title *" value={title} onChange={(evt) => setTitle(evt.target.value)} required />
+                <input type='text' className='form-control formItem' placeholder='Post title *' value={title} onChange={(evt) => setTitle(evt.target.value)} required />
               </Tooltip>
 
               <Tooltip title='Select interview date (approximately)'>
-                <input type="date" className='form-control formItem' onChange={(evt) => setInterviewDate(evt.target.value)} value={interviewDate} max={getMaxInterviewDate()} />
+                <input type='date' className='form-control formItem' onChange={(evt) => setInterviewDate(evt.target.value)} value={interviewDate} max={getMaxInterviewDate()} />
               </Tooltip>
 
               <Tooltip title='Search or enter company name'>
@@ -171,7 +171,7 @@ const NewPost = (props) => {
 
               <Tooltip title='Attach files to your post'>
                 <input
-                  type="file"
+                  type='file'
                   className='form-control formItem'
                   onChange={(evt) => setSelectedFile(evt.target.files[0])}
                 />
@@ -179,7 +179,7 @@ const NewPost = (props) => {
 
             </div>
             <div className='col col-md newPostBodyCol'>
-              <textarea type="text" className='form-control' placeholder="Tell us more about your interview quesiton, and you can use markdown! *" value={body} onChange={(evt) => setBody(evt.target.value)} required />
+              <textarea type='text' className='form-control' placeholder='Tell us more about your interview quesiton, and you can use markdown! *' value={body} onChange={(evt) => setBody(evt.target.value)} required />
             </div>
           </div>
           <div className='row newPostActionRow'>

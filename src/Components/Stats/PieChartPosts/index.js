@@ -49,8 +49,8 @@ const PieChartPosts = (props) => {
       <text
         x={centerX}
         y={centerY}
-        textAnchor="middle"
-        dominantBaseline="central"
+        textAnchor='middle'
+        dominantBaseline='central'
         style={{
           fontSize: '18px',
         }}
@@ -97,7 +97,7 @@ const PieChartPosts = (props) => {
 
         // arcLinkLabel={d => `${d.id} (${d.formattedValue})`}
         // arcLinkLabelsSkipAngle={10}
-        // arcLinkLabelsTextColor="#333333"
+        // arcLinkLabelsTextColor='#333333'
         // arcLabelsSkipAngle={10}
         // arcLabelsTextColor={{
         //   from: 'color',

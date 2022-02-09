@@ -40,11 +40,11 @@ const NewComment = (props) => {
     >
       <div className='container-fluid newCommentContainer'>
         <div className='row commentOptions'>
-          <div className="form-check form-switch solutionsSwitchDiv">
+          <div className='form-check form-switch solutionsSwitchDiv'>
             <Tooltip title='Select if your comment contains a solution'>
               <div>
-                <label className="form-check-label" for="commentWithSolution">Contains Solution</label>
-                <input className="form-check-input" type="checkbox" id="commentWithSolution" value={solution} checked={solution} onChange={() => setSolution(!solution)} />
+                <label className='form-check-label' htmlFor='commentWithSolution'>Contains Solution</label>
+                <input className='form-check-input' type='checkbox' id='commentWithSolution' value={solution} checked={solution} onChange={() => setSolution(!solution)} />
               </div>
             </Tooltip>
           </div>

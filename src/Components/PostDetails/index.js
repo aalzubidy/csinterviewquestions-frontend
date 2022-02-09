@@ -158,7 +158,7 @@ const PostDetails = () => {
     getFiles();
 
     return () => isMounted = false;
-  }, [postId, getCommentsFlag, newCommentDialog]);
+  }, [postId, getCommentsFlag, solutions, newCommentDialog]);
 
   return (
     <div className='container-fluid postDetailsContainer'>
