@@ -1,5 +1,5 @@
-import React, { memo, useEffect, useState, useContext, useRef } from 'react';
-import { withRouter, useParams } from 'react-router-dom';
+import { useEffect, useState, useContext, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import EventIcon from '@mui/icons-material/Event';
@@ -31,7 +31,7 @@ const PostDetails = () => {
   const [loading, setLoading] = useState(true);
 
   // Handle comments
-  const [comments, setComments] = useState('');
+  const [comments, setComments] = useState([]);
   const [solutions, setSolutions] = useState(false);
   const [newCommentDialog, setNewCommentDialog] = useState(false);
 
@@ -39,6 +39,12 @@ const PostDetails = () => {
 
   const createDate = create_date ? new Date(create_date).toISOString().substring(0, 10) : '';
   const interviewDate = interview_date ? new Date(interview_date).toISOString().substring(0, 10) : '';
+
+  // Handle scroll page - pagination
+  const listInnerRef = useRef();
+  const commentsLimit = 25;
+  const [commentsOffset, setCommentsOffset] = useState(0);
+  const [getCommentsFlag, setGetCommentsFlag] = useState(true);
 
   // Get post information
   const getPost = async () => {
@@ -63,24 +69,32 @@ const PostDetails = () => {
   };
 
   // Get post's comments
-  const getComments = async () => {
+  const getComments = async (replaceResults, commentsOffset = 0) => {
     try {
+      if (!getCommentsFlag) return;
+
+      const body = {
+        'postId': postId,
+        'sortOrder': 'asc',
+        'limit': commentsLimit,
+        'offset': commentsOffset
+      };
+
+      let response = '';
       if (solutions) {
-        const { data } = await API.comments.getSolutionsByPost({
-          'postId': postId,
-          'sortOrder': 'asc',
-          'limit': 25,
-          'offset': 0
-        });
-        if (isMounted) setComments(data);
+        response = await API.comments.getSolutionsByPost(body);
       } else {
-        const { data } = await API.comments.getAllByPost({
-          'postId': postId,
-          'sortOrder': 'asc',
-          'limit': 25,
-          'offset': 0
-        });
-        if (isMounted) setComments(data);
+        response = await API.comments.getAllByPost(body);
+      }
+
+      if (response && response.data && isMounted && !replaceResults) {
+        let newComments = comments.concat(response.data);
+        newComments = newComments.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);;
+        setComments(newComments);
+      } else if (response && response.data && isMounted && replaceResults) {
+        setComments(response.data);
+      } else if (!response || !response.data) {
+        setGetCommentsFlag(false);
       }
     } catch (error) {
       alertMsg('error', 'could not get comments information', error.message || genericError, error);
@@ -99,14 +113,25 @@ const PostDetails = () => {
     }
   }
 
+  // Track scroll in comments list div
+  const onScroll = () => {
+    if (listInnerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+      if (scrollTop + clientHeight === scrollHeight) {
+        setCommentsOffset(commentsOffset + commentsLimit);
+        getComments(false, commentsOffset + commentsLimit);
+      }
+    }
+  };
+
   useEffect(() => {
     isMounted = true;
 
     getPost();
-    getComments();
+    getComments(true);
 
     return () => isMounted = false;
-  }, [postId, solutions, newCommentDialog]);
+  }, [postId, getCommentsFlag, newCommentDialog]);
 
   return (
     <div className='container-fluid postDetailsContainer'>
@@ -164,25 +189,26 @@ const PostDetails = () => {
         {postSearchStatus === 'found' && comments && comments.length > 0 ? <div className='row commentsRow'>
 
           <div className='col-sm-2'>
-            <div className="form-check form-switch solutionsSwitchDiv">
+            <div className='form-check form-switch solutionsSwitchDiv'>
               <Tooltip title='Filter comments and display only comments that contain a solution'>
                 <div>
-                  <label className="form-check-label" for="flexSwitchCheckDefault">Show Solutions Only</label>
-                  <input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault" value={solutions} checked={solutions} onChange={() => setSolutions(!solutions)} />
+                  <label className='form-check-label' htmlFor='flexSwitchCheckDefault'>Show Solutions Only</label>
+                  <input className='form-check-input' type='checkbox' id='flexSwitchCheckDefault' value={solutions} checked={solutions} onChange={() => { setSolutions(!solutions); setGetCommentsFlag(true); }} />
                 </div>
               </Tooltip>
             </div>
           </div>
 
-          <div className='col-sm-10'>
+          <div className='col-sm-10 commentsList' onScroll={() => onScroll()} ref={listInnerRef}>
             {comments.map((comment) => <CommentCard key={comment.id} comment={comment} />)}
           </div>
-        </div> : ''}
-      </div>
+        </div> : ''
+        }
+      </div >
 
       <SiteFooter />
     </div >
   )
 }
 
-export default withRouter(memo(PostDetails));
+export default (PostDetails);

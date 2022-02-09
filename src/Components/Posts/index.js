@@ -1,14 +1,13 @@
-import React, { memo, useState, useEffect, useContext, useRef } from 'react';
-import { useHistory, withRouter } from 'react-router-dom';
+import { useState, useEffect, useContext, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
 import { AlertsContext } from '../../Contexts/AlertsContext';
 import { AuthContext } from '../../Contexts/AuthContext';
 import API from '../../API';
 import PostCard from '../PostCard';
 import BusinessIcon from '@mui/icons-material/Business';
 import WorkIcon from '@mui/icons-material/Work';
-import { Button, Fab, MenuItem, Select, Tooltip, Typography } from '@mui/material';
+import { Button, TextField, Fab, MenuItem, Select, Tooltip, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import PieChartPosts from '../Stats/PieChartPosts';
 import './posts.scss';
@@ -32,18 +31,21 @@ const Posts = () => {
   const [positionSuggestions, setPositionSuggestions] = useState([]);
 
   // Handle posts
-  // const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([]);
   const [sortKey, setSortKey] = useState('create_date');
   const [newPostDialog, setNewPostDialog] = useState(false);
+
+  // Handle scroll page - pagination
   const listInnerRef = useRef();
-  const [postsLimit, setPostsLimit] = useState(25);
+  const postsLimit = 25;
   const [postsOffset, setPostsOffset] = useState(0);
+  const [getPostsFlag, setGetPostsFlag] = useState(true);
 
   // Search for company and/or position posts
-  const searchPosts = async (replaceResults, postsLimit = 25, postsOffset = 0) => {
+  const searchPosts = async (replaceResults, postsOffset = 0) => {
     try {
-      // setLoading(true);
+      if (!getPostsFlag) return;
+
       const body = {
         'sortKey': sortKey,
         'sortOrder': 'desc',
@@ -52,6 +54,7 @@ const Posts = () => {
       };
 
       let response = '';
+      // If statement to decide which API to call
       if (selectedCompany || selectedPosition) {
         if (selectedCompany && !selectedPosition) {
           body['company'] = selectedCompany;
@@ -68,18 +71,17 @@ const Posts = () => {
         response = await API.posts.getAll(body);
       }
 
+      // If statement to check to replace results or append to it
       if (response.data && isMounted && replaceResults) {
-        console.log(response.data);
         setPosts(response.data);
       } else if (response.data && isMounted && !replaceResults) {
         let newPosts = posts.concat(response.data);
         newPosts = newPosts.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
-        console.log(newPosts);
         setPosts(newPosts);
+      } else if (!response || !response.data) {
+        setGetPostsFlag(false);
       }
-      // setLoading(false);
     } catch (error) {
-      // setLoading(false);
       alertMsg('error', 'Could not search for posts', error.message || genericError, error);
     }
   }
@@ -88,6 +90,7 @@ const Posts = () => {
   const handleSortKey = async (evt) => {
     evt.preventDefault();
     if (isMounted) {
+      setGetPostsFlag(true);
       setSortKey(evt.target.value);
     }
   }
@@ -148,9 +151,8 @@ const Posts = () => {
     if (listInnerRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
       if (scrollTop + clientHeight === scrollHeight) {
-        setPostsLimit(postsLimit + 25);
-        setPostsOffset(postsOffset + 25);
-        searchPosts(false, postsLimit + 25, postsOffset + 25);
+        setPostsOffset(postsOffset + postsLimit);
+        searchPosts(false, postsOffset + postsLimit);
       }
     }
   };
@@ -161,7 +163,7 @@ const Posts = () => {
     searchPosts(true);
 
     return () => { isMounted = false }
-  }, [sortKey]);
+  }, [getPostsFlag]);
 
   return (
     <div className='container-fluid overflow-auto postsContainer'>
@@ -197,7 +199,7 @@ const Posts = () => {
             </div>
             <div className='row searchBtnDiv'>
               <Tooltip title='Search for posts'>
-                <Button className='searchBtn' variant='outlined' color='primary' onClick={() => searchPosts(true)}>Search</Button>
+                <Button className='searchBtn' variant='outlined' color='primary' onClick={() => setGetPostsFlag(true)}>Search</Button>
               </Tooltip>
             </div>
           </div>
@@ -240,4 +242,4 @@ const Posts = () => {
   )
 };
 
-export default withRouter(memo(Posts));
+export default (Posts);
