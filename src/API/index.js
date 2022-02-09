@@ -118,6 +118,16 @@ const API = {
         throw error;
       }
     }
+  },
+  files: {
+    getByPostId: async (postId, token = '') => {
+      try {
+        const response = await CustomAxios(token).get(`/files/post/${postId}`);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    }
   }
 }
 

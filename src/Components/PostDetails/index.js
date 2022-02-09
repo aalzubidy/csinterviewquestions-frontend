@@ -25,6 +25,7 @@ const PostDetails = () => {
   const genericError = 'Post Details - Uknown error, check console logs for details';
   const history = useHistory();
   const { token } = useContext(AuthContext);
+  const baseURL = process.env.REACT_APP_BASE_URL;
 
   // Handle post data
   const { postId } = useParams();
@@ -41,6 +42,9 @@ const PostDetails = () => {
 
   const createDate = create_date ? new Date(create_date).toISOString().substring(0, 10) : '';
   const interviewDate = interview_date ? new Date(interview_date).toISOString().substring(0, 10) : '';
+
+  // Handle attachment files
+  const [attachmentFiles, setAttachmentFiles] = useState([]);
 
   // Handle scroll page - pagination
   const listInnerRef = useRef();
@@ -106,6 +110,19 @@ const PostDetails = () => {
     }
   }
 
+  // Get post's files
+  const getFiles = async () => {
+    try {
+      if (!attachmentFiles || attachmentFiles.length <= 0) {
+        const { data } = await API.files.getByPostId(postId);
+        if (isMounted) setAttachmentFiles(data);
+      }
+    } catch (error) {
+      alertMsg('error', 'could not get attachment files for post', error.message || genericError, error);
+      if (isMounted) setAttachmentFiles([]);
+    }
+  };
+
   // Handle new comment
   const handleNewComment = () => {
     if (!token) {
@@ -113,6 +130,13 @@ const PostDetails = () => {
     } else {
       setNewCommentDialog(true);
     }
+  }
+
+  // Get file url formatted
+  const getPostFileUrl = () => {
+    const fileName = attachmentFiles[0].file_url.substring(attachmentFiles[0].file_url.lastIndexOf('/') + 1);
+    const fileUrl = `${baseURL}${attachmentFiles[0].file_url}`;
+    return <a href={fileUrl} target='_blank' rel='noreferrer'>{fileName}</a>
   }
 
   // Track scroll in comments list div
@@ -131,6 +155,7 @@ const PostDetails = () => {
 
     getPost();
     getComments(true);
+    getFiles();
 
     return () => isMounted = false;
   }, [postId, getCommentsFlag, newCommentDialog]);
@@ -173,7 +198,7 @@ const PostDetails = () => {
             </div>
 
             <div className='col-lg-2 col-md-3 postDetailsExtra'>
-              <div>No attachments</div>
+              <div>{attachmentFiles && attachmentFiles.length > 0 ? getPostFileUrl() : 'No attachments'}</div>
             </div>
           </div>
 
