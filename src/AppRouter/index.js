@@ -1,5 +1,5 @@
-import { useContext, useEffect } from "react";
-import { Route, BrowserRouter as Router, Switch, useHistory } from "react-router-dom";
+import { useContext, useEffect } from 'react';
+import { Route, BrowserRouter as Router, Switch, useHistory } from 'react-router-dom';
 import { AuthContext, AuthActionsContext } from '../Contexts/AuthContext';
 import PrivateRoute from './PrivateRoute';
 import NotFound from '../Components/NotFound';
@@ -8,7 +8,8 @@ import NewPost from '../Components/NewPost';
 import PostDetails from '../Components/PostDetails';
 import Login from '../Components/Login';
 import DeletePost from '../Components/DeletePost';
-import Paths from "./Paths";
+import Paths from './Paths';
+import Navbar from '../Components/Navbar';
 
 const AppRouter = () => {
   // Settings
@@ -38,6 +39,7 @@ const AppRouter = () => {
 
   return (
     <Router>
+      <Navbar />
       <Switch>
         <Route exact path={Paths.home} component={Homepage} />
         <Route exact path={Paths.postDetails} component={PostDetails} />
