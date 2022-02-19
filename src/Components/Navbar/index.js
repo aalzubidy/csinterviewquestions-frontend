@@ -6,7 +6,7 @@ import './navbar.scss';
 const Navbar = () => {
     // Settings
     const history = useHistory();
-    
+
     // Authorization
     const authActions = useContext(AuthActionsContext);
     const { token } = useContext(AuthContext);
@@ -41,7 +41,7 @@ const Navbar = () => {
                                         <li><a className='dropdown-item' href='/'>Manage a Comment</a></li>
                                     </ul>
                                 </div>
-                                <a className='nav-link mx-2' href='/'>Code Contribution</a>
+                                <a className='nav-link mx-2' href='https://github.com/aalzubidy/csinterviewquestions-frontend' target='_blank' rel='noreferrer'>Source Code</a>
                                 {!token ? <a className='nav-link mx-2' onClick={handleOnClick} name='login' href='/'>Login/Register</a> : ''}
                                 {token ? <a className='nav-link mx-2' onClick={handleLogout} name='logout' href='/'>Logout</a> : ''}
                             </div>
