@@ -26,7 +26,7 @@ const ManagePost = () => {
   const [selectedFile, setSelectedFile] = useState('');
 
   // Handle validation
-  const [disablePostButton, setDisablePostButton] = useState(true);
+  const [disablePostUpdate, setDisablePostUpdate] = useState(true);
 
   // Get post information
   const getPost = async () => {
@@ -112,7 +112,12 @@ const ManagePost = () => {
   const handleUpdatePost = async () => {
     try {
       if (!managementPassword) {
-        alertMsg('error', 'Management password is required');
+        alertMsg('error', 'Management password is required.');
+        return;
+      }
+
+      if (disablePostUpdate) {
+        alertMsg('error', 'Make sure all fields are populated please.');
         return;
       }
 
@@ -125,16 +130,16 @@ const ManagePost = () => {
   }
 
   // Validate if all the fields are populated
-  const validatePostButton = () => {
+  const validatePostUpdate = () => {
     if (!title || !company || !position || !body) {
-      setDisablePostButton(true);
+      setDisablePostUpdate(true);
     } else {
-      setDisablePostButton(false);
+      setDisablePostUpdate(false);
     }
   }
 
   useEffect(() => {
-    validatePostButton();
+    validatePostUpdate();
   }, [title, position, company, body]);
 
   return (
@@ -203,7 +208,7 @@ const ManagePost = () => {
 
             <div className='row actions'>
               <div className='col'>
-                <Button variant='outlined' onClick={handleUpdatePost} disabled={disablePostButton}>Update Post</Button>
+                <Button variant='outlined' onClick={handleUpdatePost}>Update Post</Button>
               </div>
             </div>
           </div>
@@ -222,7 +227,7 @@ const ManagePost = () => {
             <div className='row actions'>
               <div className='col'>
                 <Tooltip title='Only one attachment is allowed per post. If there is another attachment it will be replaced.'>
-                  <Button variant='outlined' onClick={handleUpdatePost} disabled={disablePostButton}>Update Attachment</Button>
+                  <Button variant='outlined' onClick={handleUpdatePost}>Update Attachment</Button>
                 </Tooltip>
               </div>
             </div>
