@@ -8,6 +8,7 @@ import NewPost from '../Components/NewPost';
 import PostDetails from '../Components/PostDetails';
 import Login from '../Components/Login';
 import DeletePost from '../Components/DeletePost';
+import ManagePost from '../Components/ManagePost';
 import Paths from './Paths';
 import Navbar from '../Components/Navbar';
 
@@ -45,6 +46,7 @@ const AppRouter = () => {
         <Route exact path={Paths.postDetails} component={PostDetails} />
         <Route exact path={Paths.loginRegister} component={Login} />
         <Route exact path={Paths.deletePostComment} component={DeletePost} />
+        <Route exact path={Paths.managePost} component={ManagePost} />
         <PrivateRoute exact path={Paths.newPost}>
           <NewPost />
         </PrivateRoute>

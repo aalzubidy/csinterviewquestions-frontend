@@ -100,6 +100,14 @@ const API = {
         throw error;
       }
     },
+    getById: async (commentId, token = '') => {
+      try {
+        const response = await CustomAxios(token).get(`/comments/${commentId}`);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    },
   },
   system: {
     getStatsPositions: async (token = '') => {

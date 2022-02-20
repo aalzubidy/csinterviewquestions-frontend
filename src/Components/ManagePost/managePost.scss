@@ -1,0 +1,47 @@
+.manageCommentContainer {
+  height: 92vh;
+  margin-top: 64px;
+
+  .getItemDiv {
+    padding: 3%;
+    text-align: right;
+
+    input {
+      margin-bottom: 6px;
+    }
+  }
+
+  .editAreaDiv {
+    border-left: 1px solid rgb(240, 240, 240);
+    padding-left: 3%;
+    padding-right: 3%;
+
+    .commentOptions {
+      margin-top: 1%;
+      margin-bottom: 1%;
+      padding-left: 14px;
+    }
+
+    .commentInput {
+      min-height: 460px;
+      max-height: 460px;
+      height: 460px;
+
+      textarea {
+        min-height: 460px;
+        max-height: 460px;
+        height: 460px;
+      }
+    }
+
+    .actions {
+      text-align: right;
+      margin-top: 2%;
+      margin-bottom: 2%;
+
+      .actionButton {
+        margin-left: 6px;
+      }
+    }
+  }
+}
