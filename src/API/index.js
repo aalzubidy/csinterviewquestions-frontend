@@ -66,6 +66,14 @@ const API = {
         throw error;
       }
     },
+    updateById: async (body, token = '') => {
+      try {
+        const response = await CustomAxios(token).put('/posts', body);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    },
   },
   comments: {
     getAllByPost: async (body, token = '') => {
