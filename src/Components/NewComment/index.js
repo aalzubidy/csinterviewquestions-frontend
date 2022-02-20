@@ -63,7 +63,6 @@ const NewComment = (props) => {
       </div>
     </Modal>
   )
-
 }
 
 export default NewComment;

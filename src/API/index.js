@@ -108,6 +108,14 @@ const API = {
         throw error;
       }
     },
+    updateById: async (body, token = '') => {
+      try {
+        const response = await CustomAxios(token).put('/comments', body);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    },
   },
   system: {
     getStatsPositions: async (token = '') => {
