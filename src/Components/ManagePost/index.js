@@ -25,8 +25,22 @@ const ManagePost = () => {
   const [body, setBody] = useState('');
   const [selectedFile, setSelectedFile] = useState('');
 
+  // Handle existing attachments
+  const [existingAttachment, setExistingAttachment] = useState('');
+
   // Handle validation
   const [disablePostUpdate, setDisablePostUpdate] = useState(true);
+
+  // Get post attachments
+  const getPostAttachments = async () => {
+    try {
+      const { data } = await API.files.getByPostId(id);
+      if (data?.[0]) setExistingAttachment(data[0]);
+    } catch (error) {
+      alertMsg('error', 'could not get attachment files for post', error.message || genericError, error);
+      setExistingAttachment('');
+    }
+  }
 
   // Get post information
   const getPost = async () => {
@@ -41,6 +55,7 @@ const ManagePost = () => {
         setCompany(data.company);
         setPosition(data.position);
         setBody(data.body);
+        getPostAttachments();
       } else {
         throw new Error('could not find post');
       }
@@ -92,23 +107,7 @@ const ManagePost = () => {
     return (`${yyyy}-${mm}-${dd}`);
   }
 
-  // Handle delete post
-  const handleDeletePost = async () => {
-    try {
-      if (!managementPassword) {
-        alertMsg('error', 'Management password is required');
-        return;
-      }
-
-      alertMsg('info', 'Please wait, deleting comment.');
-      const { data } = await API.comments.deleteById(id);
-      if (data) alertMsg('success', 'Deleted your comment successfuly.');
-    } catch (error) {
-      alertMsg('error', 'could not delete comment', error.message || genericError, error);
-    }
-  }
-
-  // Handle update comment
+  // Handle update post
   const handleUpdatePost = async () => {
     try {
       if (!managementPassword) {
@@ -122,10 +121,51 @@ const ManagePost = () => {
       }
 
       alertMsg('info', 'Please wait, updating post.');
-      const { data } = await API.posts.updateById({ id: post.id, title, interviewDate: new Date(interviewDate).toISOString(), company, position, body });
+      const { data } = await API.posts.updateById({
+        postId: post.id,
+        postPin: managementPassword,
+        interviewDate: new Date(interviewDate).toISOString(),
+        title,
+        company,
+        position,
+        body
+      });
       if (data) alertMsg('success', 'Post updated successfuly.');
     } catch (error) {
+      console.log(error);
       alertMsg('error', 'could not update post', error.message || genericError, error);
+    }
+  }
+
+  // Handle delete post
+  const handleDeletePost = async () => {
+    try {
+      if (!managementPassword) {
+        alertMsg('error', 'Management password is required');
+        return;
+      }
+
+      alertMsg('info', 'Please wait, deleting post.');
+      const { data } = await API.posts.deleteById(id, { postPin: managementPassword });
+      if (data) alertMsg('success', 'Deleted post successfuly.');
+    } catch (error) {
+      alertMsg('error', 'could not delete post', error.message || genericError, error);
+    }
+  }
+
+  // Handle delete attachment file
+  const handleDeletePostAttachment = async () => {
+    try {
+      if (!managementPassword) {
+        alertMsg('error', 'Management password is required');
+        return;
+      }
+
+      alertMsg('info', 'Please wait, deleting post attachment.');
+      const { data } = await API.files.deleteByPostId(id, { postPin: managementPassword });
+      if (data) alertMsg('success', 'Deleted post attachment successfuly.');
+    } catch (error) {
+      alertMsg('error', 'could not delete post attachment', error.message || genericError, error);
     }
   }
 
@@ -158,7 +198,7 @@ const ManagePost = () => {
               <input type='text' className='form-control formItem' placeholder='Post management password *' value={managementPassword} onChange={(evt) => setManagementPassword(evt.target.value)} required />
             </Tooltip>
             <div className='deleteButtons'>
-              <Button variant='outlined' color='error' onClick={getPost}>Delete Post Attachment Only</Button>
+              <Button variant='outlined' color='error' onClick={handleDeletePostAttachment}>Delete Post Attachment Only</Button>
             </div>
             <div className='deleteButtons'>
               <Button variant='contained' color='error' onClick={handleDeletePost}>Delete Post</Button>

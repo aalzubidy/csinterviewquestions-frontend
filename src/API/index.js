@@ -74,6 +74,14 @@ const API = {
         throw error;
       }
     },
+    deleteById: async (postId, body, token = '') => {
+      try {
+        const response = await CustomAxios(token).delete(`/posts/${postId}`, body);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    }
   },
   comments: {
     getAllByPost: async (body, token = '') => {
@@ -147,6 +155,14 @@ const API = {
     getByPostId: async (postId, token = '') => {
       try {
         const response = await CustomAxios(token).get(`/files/post/${postId}`);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    },
+    deleteByPostId: async (postId, body, token = '') => {
+      try {
+        const response = await CustomAxios(token).delete(`/files/post/${postId}`, body);
         return response;
       } catch (error) {
         throw error;

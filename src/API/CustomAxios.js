@@ -22,7 +22,7 @@ const CustomAxios = (token) => {
     get: (url, config = {}) => instance.get(url, config),
     post: (url, data, config = {}) => instance.post(url, data, config),
     put: (url, data, config = {}) => instance.put(url, data, config),
-    delete: (url, config = {}) => instance.delete(url, config),
+    delete: (url, data = {}, config = {}) => instance.delete(url, { ...{ data }, ...config }),
   };
 };
 
