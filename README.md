@@ -11,7 +11,7 @@ A lot of fresh and experienced CS practitioners experience difficulty going thro
 - Also it was one of my goals for 2022 which is build three personal projects, to learn and practice "new" concepts.
 
 ## Contribution
-I welcome all ideas, suggestions, and code contribution to the frontend or the backend project. The frontend is written in react with javascript plus bootstrap and MUI, the backend is written in nodejs with postgres for the database. Create a ticket, git clone the project, create a branch with patch/minor/major, and submit your merge request. There is a pre-commit git hook that will be installed on first **npm install** which will ensure the package.json and package-lock.json will update with every commit according to the branch name. Thus, please ensure your branch name follows the standard naming **(patch/minor/major)-issueNumber**. Thank you, and looking forward for your contributions!
+I welcome all ideas, suggestions, and code contribution to the frontend or the backend project. The frontend is written in react with javascript plus bootstrap and MUI, the backend is written in nodejs with postgres for the database. Create a ticket, git clone the project, create a branch with patch/minor/major, and submit your merge request. There is a pre-commit git hook that will be installed on first **npm install** which will ensure the package.json and package-lock.json will update with every commit according to the branch name. Thus, please ensure your branch name follows the standard naming **(patch/minor/major)/issueNumber**. Thank you, and looking forward for your contributions!
 
 ## To Run Locally
 
