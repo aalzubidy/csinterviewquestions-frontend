@@ -38,7 +38,7 @@ const Navbar = () => {
                         <div className='d-flex'>
                             <div className='navbar-nav'>
                                 <a className='nav-link mx-2' onClick={(evt) => handleOnClick(evt, Paths.managePost)} href={Paths.managePost}>Manage Post</a>
-                                <a className='nav-link mx-2' href='https://github.com/aalzubidy/csinterviewquestions-frontend' target='_blank' rel='noreferrer'>Source Code</a>
+                                <a className='nav-link mx-2' href='https://github.com/aalzubidy/spurr-frontend-frontend' target='_blank' rel='noreferrer'>Source Code</a>
                                 {!token ? <a className='nav-link mx-2' onClick={(evt) => handleOnClick(evt, Paths.loginRegister)} href='/'>Login/Register</a> : ''}
                                 {token ? <a className='nav-link mx-2' onClick={handleLogout} name='logout' href='/'>Logout</a> : ''}
                             </div>

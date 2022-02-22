@@ -12,7 +12,7 @@ export function AuthProvider(props) {
     const [user, setUser] = useState(null);
 
     // Static
-    const logoutEventName = 'csinterviewquestions-logout';
+    const logoutEventName = 'spurr-frontend-logout';
 
     // Urls
     const baseUrl = 'http://localhost:3030';
