@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import { Button, Tooltip, TextField, Autocomplete } from '@mui/material';
 import { AlertsContext } from '../../Contexts/AlertsContext';
+import SiteFooter from '../SiteFooter';
 import API from '../../API';
 import './managePost.scss';
 
@@ -8,6 +9,7 @@ const ManagePost = () => {
   // Settings
   const { alertMsg } = useContext(AlertsContext);
   const genericError = 'Manage Post - Uknown error, check console logs for details';
+  const baseURL = process.env.REACT_APP_BASE_URL;
 
   const [id, setId] = useState('');
   const [post, setPost] = useState('');
@@ -26,7 +28,7 @@ const ManagePost = () => {
   const [selectedFile, setSelectedFile] = useState('');
 
   // Handle existing attachments
-  const [existingAttachment, setExistingAttachment] = useState('');
+  const [existingAttachments, setExistingAttachments] = useState([]);
 
   // Handle validation
   const [disablePostUpdate, setDisablePostUpdate] = useState(true);
@@ -35,10 +37,10 @@ const ManagePost = () => {
   const getPostAttachments = async () => {
     try {
       const { data } = await API.files.getByPostId(id);
-      if (data?.[0]) setExistingAttachment(data[0]);
+      if (data?.length > 0) setExistingAttachments(data);
     } catch (error) {
       alertMsg('error', 'could not get attachment files for post', error.message || genericError, error);
-      setExistingAttachment('');
+      setExistingAttachments([]);
     }
   }
 
@@ -178,6 +180,42 @@ const ManagePost = () => {
     }
   }
 
+  // Upload and update attachment
+  const handleUpdateAttachment = async (evt) => {
+    try {
+      if (!managementPassword) {
+        alertMsg('error', 'Management password is required.');
+        return;
+      }
+
+      if (!selectedFile) {
+        alertMsg('error', 'File is required.');
+        return;
+      }
+
+      evt.preventDefault();
+      alertMsg('info', 'Please wait, updating post attachment.');
+
+      let formData = new FormData();
+      formData.append('file', selectedFile);
+
+      const { data } = await API.posts.updateAttachmentsByPostId(id, managementPassword, formData);
+      if (data) {
+        alertMsg('success', 'Post attachment updated successfully');
+        setSelectedFile('');
+      }
+    } catch (error) {
+      alertMsg('error', 'could not update post attachment', error.message || genericError, error);
+    }
+  }
+
+  // Get file url formatted
+  const getAttachmentFileUrl = (attachmentFile) => {
+    const fileName = attachmentFile.file_url.substring(attachmentFile.file_url.lastIndexOf('/') + 1);
+    const fileUrl = `${baseURL}${attachmentFile.file_url}`;
+    return <a href={fileUrl} target='_blank' rel='noreferrer'>{fileName}</a>
+  }
+
   useEffect(() => {
     validatePostUpdate();
   }, [title, position, company, body]);
@@ -197,12 +235,6 @@ const ManagePost = () => {
             <Tooltip title='This password was sent to OP email address when post was created.'>
               <input type='text' className='form-control formItem' placeholder='Post management password *' value={managementPassword} onChange={(evt) => setManagementPassword(evt.target.value)} required />
             </Tooltip>
-            <div className='deleteButtons'>
-              <Button variant='outlined' color='error' onClick={handleDeletePostAttachment}>Delete Post Attachment Only</Button>
-            </div>
-            <div className='deleteButtons'>
-              <Button variant='contained' color='error' onClick={handleDeletePost}>Delete Post</Button>
-            </div>
           </div> : ''}
         </div>
 
@@ -256,6 +288,14 @@ const ManagePost = () => {
           <hr />
 
           <div className='row postAttachments'>
+            {existingAttachments ? <div>
+              Existing Attachments:
+              <ul>
+                {existingAttachments.map((item) => {
+                  return <li>{getAttachmentFileUrl(item)}</li>
+                })}
+              </ul>
+            </div> : ''}
             <Tooltip title='Only one attachment is allowed per post. If there is another attachment it will be replaced.'>
               <input
                 type='file'
@@ -266,14 +306,34 @@ const ManagePost = () => {
 
             <div className='row actions'>
               <div className='col'>
-                <Tooltip title='Only one attachment is allowed per post. If there is another attachment it will be replaced.'>
-                  <Button variant='outlined' onClick={handleUpdatePost}>Update Attachment</Button>
+                <span>
+                  <Tooltip title='WARNING: THIS WILL DELETE ALL ATTACHMENTS ON THIS POST'>
+                    <Button variant='outlined' color='error' onClick={handleDeletePostAttachment}>Delete All Attachments</Button>
+                  </Tooltip>
+                </span>
+                <span>
+                  <Tooltip title='WARNING: Only one attachment is allowed per post. If there is another attachment it will be replaced.'>
+                    <Button variant='outlined' onClick={handleUpdateAttachment}>Update Attachment</Button>
+                  </Tooltip>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <hr />
+
+          <div className='row'>
+            <div className='col'>
+              <div className='deleteButtons'>
+                <Tooltip title='WARNING: THIS WILL DELETE THE POST'>
+                  <Button variant='contained' color='error' onClick={handleDeletePost}>Delete Post</Button>
                 </Tooltip>
               </div>
             </div>
           </div>
         </div> : ''}
       </div>
+      <SiteFooter />
     </div>
   )
 };

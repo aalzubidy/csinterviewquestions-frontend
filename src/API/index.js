@@ -81,6 +81,14 @@ const API = {
       } catch (error) {
         throw error;
       }
+    },
+    updateAttachmentsByPostId: async (postId, postPin, body, token = '') => {
+      try {
+        const response = await CustomAxios(token).put(`/posts/${postId}/${postPin}/attachments`, body);
+        return response;
+      } catch (error) {
+        throw error;
+      }
     }
   },
   comments: {
