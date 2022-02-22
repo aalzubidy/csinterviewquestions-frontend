@@ -45,6 +45,8 @@ Backend-->>Frontend: token and refresh token
 Frontend->>Frontend: store token in memory variable
 Frontend-->>Cookies: store refresh token
 Note left of Frontend: Loop while user signed in. <br/> Same process when user open <br/> a new tab or open browser.
+Frontend->>Cookies: get refresh token
+Cookies-->>Frontend: refresh token
 Frontend->>Backend: renew token with token and refresh token
 Backend->>Backend: check tokens
 Backend-->>Frontend: token and refresh token (if all good)
